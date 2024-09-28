@@ -6,6 +6,7 @@ import { FaSuitcase } from 'react-icons/fa';
 import { TbUsers } from 'react-icons/tb';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi'; // Panah ikon
 import { Link } from 'react-router-dom';
+// import { Sidebar } from "flowbite-react";
 // ICONS //
 
 const Sidebar = () => {
@@ -17,11 +18,11 @@ const Sidebar = () => {
 
     const SIDEBAR_LINKS = [
         { id: 1, path: "/", name: "Dashboard", icon: LuBox },
-        { id: 2, path: "/pembelian", name: "Pembelian", icon: TbUsers },
-        { id: 3, path: "/pengiriman", name: "Pengiriman", icon: LuMessageSquare },
+        { id: 2, path: "/Pembelian/Pembelian", name: "Pembelian", icon: TbUsers },
+        { id: 3, path: "/Pengiriman/Pengiriman", name: "Pengiriman", icon: LuMessageSquare },
         {
             id: 4,
-            path: "/laporan",
+            path: "/Laporan/Laporan",
             name: "Laporan",
             icon: FaSuitcase,
             subLinks: [
@@ -31,17 +32,17 @@ const Sidebar = () => {
         },
         { 
           id: 5, 
-          path: "/master", 
+          path: "/src/views/Master/Master", 
           name: "Master", 
           icon: LuUser,
           subLinks: [
-            { path: "/master/user", name: "User" },
-            { path: "/master/produk", name: "Produk" },
-            { path: "/master/kategori", name: "Kategori" },
-            { path: "/master/rekening", name: "Rekening" },
-            { path: "/master/page", name: "Page" },
-            { path: "/master/section", name: "Section" },
-            { path: "/master/content", name: "Content" },
+            { path: "/src/views/Master/User/User", name: "User" },
+            { path: "/src/views/Master/Produk/Produk", name: "Produk" },
+            { path: "/src/views/Master/Kategori/Kategori", name: "Kategori" },
+            { path: "/src/views/Master/Rekening/Rekening", name: "Rekening" },
+            { path: "/src/views/Master/Page/Page", name: "Page" },
+            { path: "/src/views/Master/Section/Section", name: "Section" },
+            { path: "/src/views/Master/Content/Content", name: "Content" },
           ]
         },
     ];
@@ -49,10 +50,16 @@ const Sidebar = () => {
     return (
         <div className='w-16 md:w-56 fixed left-0 top-0 z-10 h-screen border-r pt-8 px-4 bg-white'>
             {/* Logo */}
-            <div className='mb-8'>
-                <img src="/img/logo.png" alt="logo" className="w-28 hidden md:flex"/>
-                <img src="/img/name_logo.png" alt="logo" className="w-8 flex md:hidden"/>
+            <div className="mb-8 md:flex items-center">
+                <img src="/img/logo.png" alt="logo" className="w-16 h-16" />
+                <h3 className="font-bold" style={{ color: '#8C8787' }}>
+                    PDP ARGAMULYA
+                </h3>
             </div>
+
+            {/* <Sidebar.Logo href="#" img="/favicon.svg" imgAlt="Flowbite logo">
+                Flowbite
+            </Sidebar.Logo> */}
             {/* Logo */}
 
             {/* Navigation Links */}

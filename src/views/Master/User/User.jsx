@@ -1,14 +1,15 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import '../style/table'
+import '../../style/table'
 
-export function Kategori() {
+export function User() {
   return (
     <div className="overflow-x-auto p-6 mt-10">
       <Table>
         <TableHead>
           <TableHeadCell>No</TableHeadCell>
-          <TableHeadCell>Nama Kategori</TableHeadCell>
+          <TableHeadCell>Username</TableHeadCell>
+          <TableHeadCell>Role</TableHeadCell>
           <TableHeadCell>
             <span className="sr-only">Edit</span>
           </TableHeadCell>
@@ -18,7 +19,8 @@ export function Kategori() {
             <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
               {'1'}
             </TableCell>
-            <TableCell>Domba Betina</TableCell>
+            <TableCell>Username_Customer</TableCell>
+            <TableCell>Costumer</TableCell>
             <TableCell>
               <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
                 Edit
@@ -31,4 +33,4 @@ export function Kategori() {
   );
 }
 
-export default Kategori
+export default User

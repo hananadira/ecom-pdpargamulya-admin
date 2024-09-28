@@ -1,8 +1,8 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import '../style/table'
+import '../../style/table'
 
-export function Page() {
+export function Kategori() {
   return (
     <div className="overflow-x-auto p-6 mt-10">
       <Table>
@@ -31,4 +31,4 @@ export function Page() {
   );
 }
 
-export default Page
+export default Kategori

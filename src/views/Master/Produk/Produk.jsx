@@ -1,16 +1,17 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import './style/table'
+import '../../style/table'
 
-export function Pembelian() {
+export function Product() {
   return (
     <div className="overflow-x-auto p-6 mt-10">
       <Table>
         <TableHead>
           <TableHeadCell>No</TableHeadCell>
-          <TableHeadCell>Username</TableHeadCell>
-          <TableHeadCell>Product</TableHeadCell>
-          <TableHeadCell>Total</TableHeadCell>
+          <TableHeadCell>Nama Produk</TableHeadCell>
+          <TableHeadCell>Deskripsi</TableHeadCell>
+          <TableHeadCell>Price</TableHeadCell>
+          <TableHeadCell>Stock</TableHeadCell>
           <TableHeadCell>
             <span className="sr-only">Edit</span>
           </TableHeadCell>
@@ -20,9 +21,10 @@ export function Pembelian() {
             <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
               {'1'}
             </TableCell>
-            <TableCell>Username_Customer</TableCell>
             <TableCell>Domba</TableCell>
+            <TableCell>domba ini sehat dan bugar, bla bla bla</TableCell>
             <TableCell>Rp. 3.500.000</TableCell>
+            <TableCell>10</TableCell>
             <TableCell>
               <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
                 Edit
@@ -35,5 +37,4 @@ export function Pembelian() {
   );
 }
 
-
-export default Pembelian
+export default Product

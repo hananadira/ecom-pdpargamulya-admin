@@ -1,6 +1,6 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import '../style/table'
+import '../../style/table'
 
 export function Content() {
   return (

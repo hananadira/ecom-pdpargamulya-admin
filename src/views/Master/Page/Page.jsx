@@ -1,14 +1,14 @@
 
 import { Table, TableBody, TableCell, TableHead, TableHeadCell, TableRow } from "flowbite-react";
-import '../style/table'
+import '../../style/table'
 
-export function Rekening() {
+export function Page() {
   return (
     <div className="overflow-x-auto p-6 mt-10">
       <Table>
         <TableHead>
           <TableHeadCell>No</TableHeadCell>
-          <TableHeadCell>Metode</TableHeadCell>
+          <TableHeadCell>Nama Kategori</TableHeadCell>
           <TableHeadCell>
             <span className="sr-only">Edit</span>
           </TableHeadCell>
@@ -18,7 +18,7 @@ export function Rekening() {
             <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
               {'1'}
             </TableCell>
-            <TableCell>Bank</TableCell>
+            <TableCell>Domba Betina</TableCell>
             <TableCell>
               <a href="#" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">
                 Edit
@@ -31,4 +31,4 @@ export function Rekening() {
   );
 }
 
-export default Rekening
+export default Page

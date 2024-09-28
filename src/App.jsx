@@ -1,20 +1,22 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import Pembelian from "./pages/Pembelian";
-import Pengiriman from "./pages/Pengiriman";
-import Laporan from "./pages/Laporan";
-import Master from "./pages/Master";
-import LprnPembelian from './pages/Laporan/Pembelian';
-import LprnPengiriman from './pages/Laporan/Penjualan';
-import MsterUser from './pages/Master/User';
-import MsterProduct from './pages/Master/Produk';
-import MsterKategori from './pages/Master/Kategori';
-import MsterRekening from './pages/Master/Rekening';
-import MsterPage from './pages/Master/Page';
-import MsterSection from './pages/Master/Section';
-import MsterContent from './pages/Master/Content';
+import Home from "./views/Home";
+import Pembelian from "./views/Pembelian/Pembelian";
+import Pengiriman from "./views/Pengiriman/Pengiriman";
+import Laporan from "./views/Laporan/Laporan";
+import Master from "./views/Master/Master";
+import LprnPembelian from './views/Laporan/Pembelian';
+import LprnPengiriman from './views/Laporan/Penjualan';
+import MsterUser from './views/Master/User/User';
+import MsterProduct from './views/Master/Produk/Produk';
+import MsterKategori from './views/Master/Kategori/Kategori';
+import MsterRekening from './views/Master/Rekening/Rekening';
+import MsterPage from './views/Master/Page/Page';
+import MsterSection from './views/Master/Section/Section';
+import MsterContent from './views/Master/Content/Content';
 // import 'flowbite';
+
+
 
 function App() {
   return (
