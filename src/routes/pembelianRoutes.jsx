@@ -1,9 +1,6 @@
 //import react router dom
 import { Routes, Route } from "react-router-dom";
 
-//import view homepage
-import Home from '../views/Home.jsx';
-
 //import view posts index
 import Pembelian from '../views/Pembelian/Pembelian.jsx';
 
@@ -16,12 +13,9 @@ import PembelianEdit from '../views/Pembelian/Edit.jsx';
 // import view post detail
 import PembelianDetail from '../views/Pembelian/Detail.jsx';
 
-function RoutesIndex() {
+function pembelianRoutes() {
     return (
         <Routes>
-
-            {/* route "/" */}
-            <Route path="/" element={<Home />} />
 
             {/* route "/posts" */}
             <Route path="/posts" element={<Pembelian />} />
@@ -39,4 +33,4 @@ function RoutesIndex() {
     )
 }
 
-export default RoutesIndex
+export default pembelianRoutes

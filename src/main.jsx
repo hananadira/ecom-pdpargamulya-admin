@@ -1,11 +1,21 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-// import 'flowbite';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { Provider as ReduxProvider } from 'react-redux';
+import App from './App';
+import store from './redux/store'
+import { ThemeProvider } from '@material-tailwind/react';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistStore } from 'redux-persist';
+let persistor = persistStore(store);
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <ThemeProvider>
+      <ReduxProvider store={store}>
+        {/* <PersistGate persistor={persistor}> */}
+            <App />
+        {/* </PersistGate> */}
+      </ReduxProvider>
+    </ThemeProvider>
+  </React.StrictMode>
 )

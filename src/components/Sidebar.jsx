@@ -18,11 +18,11 @@ const Sidebar = () => {
 
     const SIDEBAR_LINKS = [
         { id: 1, path: "/", name: "Dashboard", icon: LuBox },
-        { id: 2, path: "/Pembelian/Pembelian", name: "Pembelian", icon: TbUsers },
-        { id: 3, path: "/Pengiriman/Pengiriman", name: "Pengiriman", icon: LuMessageSquare },
+        { id: 2, path: "/Pembelian", name: "Pembelian", icon: TbUsers },
+        { id: 3, path: "/Pengiriman", name: "Pengiriman", icon: LuMessageSquare },
         {
             id: 4,
-            path: "/Laporan/Laporan",
+            path: "/Laporan",
             name: "Laporan",
             icon: FaSuitcase,
             subLinks: [
@@ -32,17 +32,17 @@ const Sidebar = () => {
         },
         { 
           id: 5, 
-          path: "/src/views/Master/Master", 
+          path: "/Master", 
           name: "Master", 
           icon: LuUser,
           subLinks: [
-            { path: "/src/views/Master/User/User", name: "User" },
-            { path: "/src/views/Master/Produk/Produk", name: "Produk" },
-            { path: "/src/views/Master/Kategori/Kategori", name: "Kategori" },
-            { path: "/src/views/Master/Rekening/Rekening", name: "Rekening" },
-            { path: "/src/views/Master/Page/Page", name: "Page" },
-            { path: "/src/views/Master/Section/Section", name: "Section" },
-            { path: "/src/views/Master/Content/Content", name: "Content" },
+            { path: "/Master/User", name: "User" },
+            { path: "/Master/Produk", name: "Produk" },
+            { path: "/Master/Kategori", name: "Kategori" },
+            { path: "/Master/Rekening", name: "Rekening" },
+            { path: "/Master/Page", name: "Page" },
+            { path: "/Master/Section", name: "Section" },
+            { path: "/Master/Content", name: "Content" },
           ]
         },
     ];
