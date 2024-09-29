@@ -1,11 +1,11 @@
 import { apiCore } from "./ApiCore";
 
-const PengirimanApi = apiCore.injectEndpoints({
-  reducerPath: 'PengirimanApi',
-  tagTypes: ["Pengiriman"],
+const PembelianApi = apiCore.injectEndpoints({
+  reducerPath: 'PembelianApi',
+  tagTypes: ["Pembelian"],
   endpoints: (builder) => ({
-    getPengiriman: builder.query({
-      query: () => '/api/orders',
+    getPembelian: builder.query({
+      query: () => '/api/orderDetail',
       transformResponse: (response) => response.data,
     }),
     getCategory: builder.query({
@@ -13,11 +13,11 @@ const PengirimanApi = apiCore.injectEndpoints({
       transformResponse: (response) => response.data,
     }),
     getProduct: builder.query({
-      query: (id) => `/api/orders/${id}`,
+      query: (id) => `/api/orderDetail/${id}`,
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({
-        url: `/api/orders/${id}`,
+        url: `/api/orderDetail/${id}`,
         method: 'DELETE',
       }),
       transformResponse: (response) => response.data,
@@ -26,10 +26,10 @@ const PengirimanApi = apiCore.injectEndpoints({
 });
 
 export const {
-  useGetPengirimanQuery,
+  useGetPembelianQuery,
   useGetCategoryQuery,
   useGetProductQuery,
   useDeleteProductMutation,
-} = PengirimanApi;
+} = PembelianApi;
 
-export default PengirimanApi;
+export default PembelianApi;

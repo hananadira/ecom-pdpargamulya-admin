@@ -1,11 +1,10 @@
-// src/store/index.js
 import { configureStore } from '@reduxjs/toolkit';
-// import dashboard from '../features/user/userSlice';
 import pengirimanSlice from './slice/PengirimanSlice';
+import pembelianSlice from './slice/PembelianSlice';
 
 const store = configureStore({
   reducer: {
-    // user: dashboard,
+    pembelian: pembelianSlice,
     pengiriman: pengirimanSlice,
   },
 });
