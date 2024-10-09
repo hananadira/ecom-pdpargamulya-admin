@@ -1,28 +1,41 @@
-import { createSlice } from "@reduxjs/toolkit";
+// src/redux/slice/PengirimanSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { useGetPengirimanQuery } from '../services/PengirimanApi';
+
+// Thunks untuk operasi CRUD
+export const fetchPengiriman = createAsyncThunk(
+  'pengiriman/fetchPengiriman',
+  async () => {
+    const response = await useGetPengirimanQuery();
+    return response.data;
+  }
+);
 
 const initialState = {
-  pengiriman: [],
+  pengirimanApi: [],
+  loading: false,
+  error: null,
 };
 
 const pengirimanSlice = createSlice({
-  name: "pengiriman",
+  name: 'pengiriman',
   initialState,
-  reducers: {
-    addItem(state, action) {
-      state.pengiriman.push(action.payload);
-    },
-    removeItem(state, action) {
-      state.pengiriman = state.pengiriman.filter((item) => item.id !== action.payload);
-    },
-    updateItem(state, action) {
-      const { id, updatedItem } = action.payload;
-      const existingItem = state.pengiriman.find((item) => item.id === id);
-      if (existingItem) {
-        Object.assign(existingItem, updatedItem);
-      }
-    },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPengiriman.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPengiriman.fulfilled, (state, action) => {
+        state.loading = false;
+        state.pengirimanApi = action.payload;
+      })
+      .addCase(fetchPengiriman.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      });
   },
 });
 
-export const { addItem, removeItem, updateItem } = pengirimanSlice.actions;
 export default pengirimanSlice.reducer;

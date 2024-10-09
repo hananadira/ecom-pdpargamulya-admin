@@ -1,21 +1,36 @@
-import { apiCore } from "./ApiCore";
+import ApiCore from './ApiCore';
 
-const PembelianApi = apiCore.injectEndpoints({
-  reducerPath: 'PembelianApi',
-  tagTypes: ["Pembelian"],
+const pembelianApi = ApiCore.injectEndpoints({
+  reducerPath: 'pembelianApi',
+  tagTypes: ['Pembelian'],
   endpoints: (builder) => ({
-    getPembelian: builder.query({
+    getPembelians: builder.query({
       query: () => '/api/orderDetail',
-      transformResponse: (response) => response.data,
+      transformResponse: (response) => {
+        console.log('Raw response: ', response); //log the raw response for debugging 
+        return response.data;
+      },
     }),
-    getCategory: builder.query({
-      query: () => '/api/category',
-      transformResponse: (response) => response.data,
-    }),
-    getProduct: builder.query({
+    getPembelian: builder.query({
       query: (id) => `/api/orderDetail/${id}`,
     }),
-    deleteProduct: builder.mutation({
+    createPembelian: builder.mutation({
+      query: (newPembelian) => ({
+        url: '/api/orderDetail',
+        method: 'POST',
+        body: newPembelian,
+      }),
+      invalidatesTags: ['Pembelian'],
+    }),
+    updatePembelian: builder.mutation({
+      query: ({ id, ...updatedPembelian }) => ({
+        url: `/api/orderDetail/${id}`,
+        method: 'PUT',
+        body: updatedPembelian,
+      }),
+      invalidatesTags: ['Pembelian'],
+    }),
+    deletePembelian: builder.mutation({
       query: (id) => ({
         url: `/api/orderDetail/${id}`,
         method: 'DELETE',
@@ -26,10 +41,11 @@ const PembelianApi = apiCore.injectEndpoints({
 });
 
 export const {
+  useGetPembeliansQuery,
   useGetPembelianQuery,
-  useGetCategoryQuery,
-  useGetProductQuery,
-  useDeleteProductMutation,
-} = PembelianApi;
+  useCreatePembelianMutation,
+  useUpdatePembelianMutation,
+  useDeletePembelianMutation,
+} = pembelianApi;
 
-export default PembelianApi;
+export default pembelianApi;

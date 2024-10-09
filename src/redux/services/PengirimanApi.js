@@ -1,35 +1,39 @@
-import { apiCore } from "./ApiCore";
+// src/redux/services/PengirimanApi.js
+import ApiCore from './ApiCore';
 
-const PengirimanApi = apiCore.injectEndpoints({
-  reducerPath: 'PengirimanApi',
-  tagTypes: ["Pengiriman"],
+export const pengirimanApi = ApiCore.injectEndpoints({
   endpoints: (builder) => ({
     getPengiriman: builder.query({
-      query: () => '/api/orders',
-      transformResponse: (response) => response.data,
+      query: () => 'api/orders',
     }),
-    getCategory: builder.query({
-      query: () => '/api/category',
-      transformResponse: (response) => response.data,
+    createPengiriman: builder.mutation({
+      query: (newPengiriman) => ({
+        url: 'api/orders',
+        method: 'POST',
+        body: newPengiriman,
+      }),
     }),
-    getProduct: builder.query({
-      query: (id) => `/api/orders/${id}`,
+    updatePengiriman: builder.mutation({
+      query: ({ id, ...updatedPengiriman }) => ({
+        url: `api/orders/${id}`,
+        method: 'PUT',
+        body: updatedPengiriman,
+      }),
     }),
-    deleteProduct: builder.mutation({
+    deletePengiriman: builder.mutation({
       query: (id) => ({
-        url: `/api/orders/${id}`,
+        url: `api/orders/${id}`,
         method: 'DELETE',
       }),
-      transformResponse: (response) => response.data,
     }),
   }),
 });
 
 export const {
   useGetPengirimanQuery,
-  useGetCategoryQuery,
-  useGetProductQuery,
-  useDeleteProductMutation,
-} = PengirimanApi;
+  useCreatePengirimanMutation,
+  useUpdatePengirimanMutation,
+  useDeletePengirimanMutation,
+} = pengirimanApi;
 
-export default PengirimanApi;
+export default pengirimanApi;

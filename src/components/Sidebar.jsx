@@ -21,10 +21,10 @@ const Sidebar = () => {
       path: "/laporan",
       name: "Laporan",
       icon: FaSuitcase,
-      subLinks: [
-        { path: "/laporan/pembelian", name: "Pembelian" },
-        { path: "/laporan/penjualan", name: "Penjualan" }
-      ]
+      // subLinks: [
+      //   { path: "/laporan/pembelian", name: "Pembelian" },
+      //   { path: "/laporan/penjualan", name: "Penjualan" }
+      // ]
     },
     {
       id: 5,

@@ -1,12 +1,15 @@
+// src/redux/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import pengirimanSlice from './slice/PengirimanSlice';
-import pembelianSlice from './slice/PembelianSlice';
+import pembelianReducer from './slice/PembelianSlice';
+import pembelianApi from './services/PembelianApi';
 
 const store = configureStore({
   reducer: {
-    pembelian: pembelianSlice,
-    pengiriman: pengirimanSlice,
+    pembelian: pembelianReducer,
+    [pembelianApi.reducerPath]: pembelianApi.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(pembelianApi.middleware),
 });
 
-export default store;
+export default store; 
