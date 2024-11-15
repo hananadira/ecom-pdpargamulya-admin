@@ -1,152 +1,124 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import api from '../../../api';
+import React, { useState } from "react";
+import { useAsyncError, useNavigate } from "react-router-dom";
+import { useGetProductsQuery, useDeleteProductMutation } from '../../../redux/services/ProductApi';
 import { Card, Typography, Button, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
-export default function Produk() {
-  const [Produk, setProduk] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(5); // Jumlah data per halaman
+const Product = () => {
+  const { data, error, isLoading } = useGetProductsQuery();
+  const [deleteProduct] = useDeleteProductMutation();
   const navigate = useNavigate();
 
-  // Fetch Data Produk
-  const fetchDataProduk = async () => {
-    try {
-      const response = await api.get('/api/products');
-      console.log(response.data);
-      if (response.data.success) {
-        setProduk(response.data.data); // Use response.data.data to set state
-      }
-    } catch (error) {
-      console.error("Error fetching Produk data:", error);
-    }
-  };
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
-  useEffect(() => {
-    fetchDataProduk();
-  }, []);
+  // Debugging untuk melihat state
+  console.log('Data Product:', data);
 
-  // Pagination Logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = Produk.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(Produk.length / itemsPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
-
-  const handleDelete = (id) => {
+  // Handle Delete
+  const handleDelete = async (id) => {
     if (window.confirm("Apakah yakin Anda ingin menghapus data?")) {
-      // Call your delete API method here using id
-      console.log("Delete item with id:", id);
-      // After deletion, you may want to refetch the data
-      fetchDataProduk();
+      try {
+        await deleteProduct(id);
+        console.log('Data berhasil dihapus');
+      } catch (err) {
+        console.error('Error saat menghapus:', err);
+      }
     }
   };
 
+  // Loading state
+  if (isLoading) return <div className="text-center p-4">Loading...</div>;
+
+  // Cek jika ada error
+  if (error) {
+    console.error('Error fetching product:', error);
+    return <div className="text-center p-4 text-red-600">Terjadi kesalahan saat mengambil data.</div>;
+  }
+
+  const indexOfLastProduct = currentPage * itemsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
+  const currentProduct = data.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  // Render the table
   return (
-    <div className="container mr-8 p-8">
-      <Card className="h-full w-full overflow-hidden p-6">
+    <div className="container mx-auto p-8">
+      <Card className="overflow-hidden p-6">
         <div className="flex justify-between items-center mb-4">
           <Typography variant="h6" color="blue-gray">
-            Data Produk
+            Data Product
           </Typography>
-          <Button variant="gradient" size="sm" onClick={() => console.log("Add Data Clicked")}>
+          <Button variant="gradient" size="sm" onClick={() => navigate('/master/produk/create')}>
             Tambah Data
           </Button>
         </div>
         <table className="w-full min-w-max table-auto text-left border-collapse border border-gray-200">
           <thead>
-            <tr>
-              <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
-                  No
-                </Typography>
-              </th>
-              <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
-                  Produk
-                </Typography>
-              </th>
-              <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
-                  Deskripsi 
-                </Typography>
-              </th>
-              <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
-                  Price 
-                </Typography>
-              </th>
-              <th className="border-b border-blue-gray-100 bg-blue-gray-50 p-4">
-                <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
-                  Action
-                </Typography>
-              </th>
+            <tr className="bg-blue-gray-100">
+              <th className="px-4 py-2 border-b">No</th>
+              <th className="px-4 py-2 border-b">Nama Produk</th>
+              <th className="px-4 py-2 border-b">Deskripsi</th>
+              <th className="px-4 py-2 border-b">Harga</th>
+              <th className="px-4 py-2 border-b">Stok</th>
+              <th className="px-4 py-2 border-b">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((item, index) => {
-              const { id, name_product, description, price } = item;
-
-              return (
-                <tr key={id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
-                  <td className="p-4">
-                    <Typography variant="small" color="blue-gray" className="font-normal">
-                      {index + 1 + indexOfFirstItem}
-                    </Typography>
+            {currentProduct.length > 0 ? (
+              currentProduct.map((product, index) => (
+                <tr key={product.id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
+                  <td className="px-4 py-2 border-b">{index + 1}</td>
+                  <td className="px-4 py-2 border-b">{product.name_product}</td>
+                  <td className="px-4 py-2 border-b">
+                    <div className="max-w-xs break-words">{product.description}</div>
                   </td>
-                  <td className="p-4">
-                    <Typography variant="small" color="blue-gray" className="font-normal">
-                      {name_product}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography variant="small" color="blue-gray" className="font-normal">
-                      {description}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
-                    <Typography variant="small" color="blue-gray" className="font-normal">
-                      {price}
-                    </Typography>
-                  </td>
-                  <td className="p-4">
+                  <td className="px-4 py-2 border-b">{product.price}</td>
+                  <td className="px-4 py-2 border-b">{product.stock}</td>
+                  <td className="px-4 py-2 border-b">
                     <Menu>
                       <MenuHandler>
                         <Button variant="text" color="blue-gray" className="flex items-center">
-                          <span className="material-icons">more_vert</span>
+                          <FontAwesomeIcon icon={faEllipsisVertical} className="w-5 h-5" />
                         </Button>
                       </MenuHandler>
                       <MenuList>
-                        <MenuItem onClick={() => navigate(`/Produk/detail/${id}`)}>Detail</MenuItem>
-                        <MenuItem onClick={() => navigate(`/Produk/edit/${id}`)}>Edit</MenuItem>
-                        <MenuItem onClick={() => handleDelete(id)}>Hapus</MenuItem>
+                        <MenuItem onClick={() => navigate(`/master/produk/detail/${product.id}`)}>Detail</MenuItem>
+                        <MenuItem onClick={() => navigate(`/master/produk/edit/${product.id}`)}>Edit</MenuItem>
+                        <MenuItem onClick={() => handleDelete(product.id)}>Delete</MenuItem>
                       </MenuList>
                     </Menu>
                   </td>
                 </tr>
-              );
-            })}
+              ))
+            ) : (
+              <tr>
+                <td colSpan="6" className="text-center p-4">Tidak ada data</td>
+              </tr>
+            )}
           </tbody>
         </table>
-
-        {/* Pagination Controls */}
-        <div className="flex justify-center mt-4">
-          <div className="flex space-x-2">
-            {Array.from({ length: totalPages }, (_, index) => (
-              <button
-                key={index + 1}
-                className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700'}`}
-                onClick={() => handlePageChange(index + 1)}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
+        {/* Pagination */}
+        <div className="flex justify-between items-center mt-4">
+          <Button 
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} 
+            disabled={currentPage === 1}
+          >
+            Sebelumnya
+          </Button>
+          <Typography>{`Halaman ${currentPage} dari ${totalPages}`}</Typography>
+          <Button 
+            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))} 
+            disabled={currentPage === totalPages}
+          >
+            Berikutnya
+          </Button>
         </div>
       </Card>
     </div>
   );
-}
+};
+
+export default Product;

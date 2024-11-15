@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetPengirimanQuery } from "../../redux/services/PengirimanApi";
+import { useGetKategoriQuery } from "../../../redux/services/ProductApi";
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-const DetailPengiriman = () => {
+const DetailKategori = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, error, isLoading } = useGetPengirimanQuery(id);
+  const { data, error, isLoading } = useGetKategoriQuery(id);
 
   // Debugging untuk memeriksa data
   console.log('Data API:', data); // Cek data yang diterima
@@ -25,7 +25,7 @@ const DetailPengiriman = () => {
   }
 
   // Cek struktur data
-  console.log('Struktur data pengiriman:', data);
+  console.log('Struktur data user:', data);
 
   const formatDate = () => {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Jakarta' };
@@ -35,46 +35,26 @@ const DetailPengiriman = () => {
   return (
     <div className="ml-3 p-5 bg-gray-100 min-h-screen">
       <div className="flex items-center mb-5">
-        <Button 
-          variant="text" 
-          onClick={() => navigate('/pengiriman')} 
-          className="material-icons mr-2"
-        >
+        <Button variant="text" onClick={() => navigate('/master/kategori')} className="material-icons mr-2">
           <FontAwesomeIcon icon={faArrowLeft} />
         </Button>
-        <Typography variant="h5" className="font-bold">
-          Detail Pengiriman
-        </Typography>
+        <Typography variant="h5" className="font-bold">Detail Kategori</Typography>
         <Typography className="ml-auto text-gray-500"> 
           {formatDate()} 
         </Typography>
       </div>
 
       <div className="flex flex-col space-y-5">
-        {/* Card 2 */}
         <Card className="w-full">
           <CardBody>
             <Typography variant="h5" color="blue-gray" className="mb-2">
-              Daftar Transaksi
+              Information
             </Typography>
 
-            <div className="flex justify-between mb-2"> {/* Flex container for product and category */}
+            <div className="flex items-center mb-2">
               <div className="flex-1">
-                <Typography>No Transaksi</Typography>
-                <Typography className='font-bold'>{data.shipping.shipping_date}</Typography>
-              </div>
-              <div className="flex-1">
-                <Typography>Proses Pengiriman</Typography>
-                <Typography className='font-bold mb-5'>{data.shipping.shipping_address}</Typography>
-              </div>
-            </div>
-
-            <div className="flex justify-between"> {/* Flex container for totals */}
-              <div className="flex-1">
-                <Typography>Amount</Typography>
-                <Typography className='font-bold mb-5'>
-                  {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data.total_amount)}
-                </Typography>
+                <Typography>Name</Typography>
+                <Typography className='font-bold'>{data.name_category || "Unknown"}</Typography>
               </div>
             </div>
           </CardBody>
@@ -84,4 +64,4 @@ const DetailPengiriman = () => {
   );
 };
 
-export default DetailPengiriman;
+export default DetailKategori;

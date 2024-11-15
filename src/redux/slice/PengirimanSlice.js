@@ -1,12 +1,11 @@
-// src/redux/slice/PengirimanSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { useGetPengirimanQuery } from '../services/PengirimanApi';
+import { useGetPengirimanQuery } from '../services/PengirimanApi'; // Pastikan ini import hook, bukan API
 
 // Thunks untuk operasi CRUD
 export const fetchPengiriman = createAsyncThunk(
   'pengiriman/fetchPengiriman',
-  async () => {
-    const response = await useGetPengirimanQuery();
+  async (id) => {
+    const response = await fetchBaseQuery({ baseUrl: baseUrlApi })(`/orders/${id}`); // Perbaiki fetch
     return response.data;
   }
 );
@@ -38,4 +37,4 @@ const pengirimanSlice = createSlice({
   },
 });
 
-export default pengirimanSlice.reducer;
+export default pengirimanSlice.reducer; // Pastikan ini ekspor default

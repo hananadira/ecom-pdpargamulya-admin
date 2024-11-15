@@ -3,6 +3,23 @@ import {
   CardBody,
   Typography,
 } from "@material-tailwind/react";
+import { useGetUsersQuery } from "../redux/services/UserApi";
+
+const User = () => {
+  const { data, error, isLoading } = useGetUsersQuery();
+  console.log('Data User:', data);
+
+  // loading state 
+  if (isLoading) return <div className="text-center p-4">Loading...</div>;
+
+  // error state 
+  if(error) {
+    console.error('Error fetching user:', error);
+    return <div className="text-center p-4 text-red-600">Terjadi kesalahan saat mengambil data.</div>;
+  }
+}
+
+
 
 export function Home() {
   return (

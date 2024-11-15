@@ -53,28 +53,28 @@ const Pengiriman = () => {
         <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between">
           <div>
             <Typography variant="h5" color="blue-gray">
-              Pengiriman List
+              Members List
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              See information about all pengiriman
+              See information about all members
             </Typography>
           </div>
-          {/* <div className="flex gap-2">
+          <div className="flex gap-2">
             <Button variant="outlined" size="sm">
               View All
             </Button>
             <Button className="flex items-center gap-2" size="sm">
               <UserPlusIcon strokeWidth={2} className="h-4 w-4" /> Add Member
             </Button>
-          </div> */}
+          </div>
         </div>
 
         {/* Mengganti Tabs dengan tombol untuk navigasi */}
         <div className="flex gap-4 mt-6">
-          <Button onClick={() => handleNavigation("pengiriman")} size="sm">
+          <Button onClick={() => handleNavigation("pengiriman")} variant="outlined" size="sm">
             Data
           </Button>
-          <Button onClick={() => handleNavigation("/pengiriman/selesai")} size="sm" className="bg-green-500">
+          <Button onClick={() => handleNavigation("pengiriman/selesai")} variant="outlined" size="sm">
             Selesai
           </Button>
         </div>
@@ -103,7 +103,7 @@ const Pengiriman = () => {
                 <tr key={pengiriman.id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
                   <td className="px-4 py-2 border-b">{index + 1}</td>
                   <td className="px-4 py-2 border-b">{pengiriman.username}</td>
-                  <td className="px-4 py-2 border-b">{pengiriman.order.status}</td>
+                  <td className="px-4 py-2 border-b">{pengiriman.status}</td>
                   <td className="px-4 py-2 border-b">
                     <Menu>
                       <MenuHandler>

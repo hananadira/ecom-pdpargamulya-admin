@@ -12,14 +12,14 @@ import {
   MenuList,
   MenuItem,
 } from "@material-tailwind/react";
-import { useGetLaporansAllQuery, useDeleteLaporanMutation } from "../../redux/services/LaporanApi";
+import { useGetLaporansSetujuQuery, useDeleteLaporanMutation } from "../../redux/services/LaporanApi";
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-const Laporan = () => {
-  const { data, error, isLoading } = useGetLaporansAllQuery();
+const LaporanSetuju = () => {
+  const { data, error, isLoading } = useGetLaporansSetujuQuery();
   const [deleteLaporan] = useDeleteLaporanMutation();
   const navigate = useNavigate();
 
@@ -61,13 +61,13 @@ const Laporan = () => {
   return (
     <Card className="container mx-auto p-6 md:p-8">
       <CardHeader floated={false} shadow={false} className="rounded-none mb-6">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between">
           <div>
             <Typography variant="h5" color="blue-gray">
               Laporan List
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              See information about all report
+              See information about report received
             </Typography>
           </div>
           {/* <div className="flex gap-2">
@@ -109,7 +109,7 @@ const Laporan = () => {
           {currentLaporan.length > 0 ? (
             currentLaporan.map((data, index) => (
               <tr key={data.id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
-                <td className="px-4 py-2 border-b">{index + 1}</td>
+                <td className="px-4 py-2 border-b">{indexOfFirstLaporan + index + 1}</td>
                 <td className="px-4 py-2 border-b">{data.user.username}</td>
                 <td className="px-4 py-2 border-b">{data.no_ref_order}</td>
                 <td className="px-4 py-2 border-b">{data.total_amount}</td>
@@ -156,4 +156,4 @@ const Laporan = () => {
   );
 };
 
-export default Laporan;
+export default LaporanSetuju;

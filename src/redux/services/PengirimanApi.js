@@ -1,39 +1,56 @@
-// src/redux/services/PengirimanApi.js
-import ApiCore from './ApiCore';
+// services/PengirimanApi.js
+import { apiCore } from './ApiCore';
 
-export const pengirimanApi = ApiCore.injectEndpoints({
+const PengirimanApi = apiCore.injectEndpoints({
+  reducerPath: 'PengirimanApi',
+  tagTypes: ['Pengiriman'],
   endpoints: (builder) => ({
-    getPengiriman: builder.query({
-      query: () => 'api/orders',
+    getPengirimans: builder.query({
+      query: () => '/api/orders',
+      transformResponse: (response) => {
+        console.log("raw response:", response);
+        if (response && response.data) {
+          return response.data; // Sesuaikan dengan struktur respons API Anda
+        }
+        console.error("Invalid response structure:", response || "response is null or undefined");
+        return []; // Mengembalikan array kosong jika respons tidak valid
+      },
     }),
-    createPengiriman: builder.mutation({
-      query: (newPengiriman) => ({
-        url: 'api/orders',
-        method: 'POST',
-        body: newPengiriman,
-      }),
+    getPengiriman: builder.query({
+      query: (id) => `/api/orders/${id}`,
+      transformResponse: (response) => {
+        console.log("raw response:", response);
+        if (response && response.data) {
+          return response.data; // Sesuaikan jika perlu
+        }
+        console.error("Invalid response structure:", response || "response is null or undefined");
+        return null; // Mengembalikan null jika respons tidak valid
+      },
     }),
     updatePengiriman: builder.mutation({
       query: ({ id, ...updatedPengiriman }) => ({
-        url: `api/orders/${id}`,
+        url: `/api/orders/${id}`,
         method: 'PUT',
         body: updatedPengiriman,
       }),
+      invalidatesTags: ['Pengiriman'],
     }),
     deletePengiriman: builder.mutation({
       query: (id) => ({
-        url: `api/orders/${id}`,
+        url: `/api/orders/${id}`,
         method: 'DELETE',
       }),
+      invalidatesTags: ['Pengiriman'],
     }),
   }),
 });
 
 export const {
+  useGetPengirimansQuery,
   useGetPengirimanQuery,
-  useCreatePengirimanMutation,
+  // useCreatePengirimanMutation,
   useUpdatePengirimanMutation,
   useDeletePengirimanMutation,
-} = pengirimanApi;
+} = PengirimanApi;
 
-export default pengirimanApi;
+export default PengirimanApi;
