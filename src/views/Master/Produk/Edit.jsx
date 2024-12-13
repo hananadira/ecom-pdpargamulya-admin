@@ -12,6 +12,8 @@ const EditProduct = () => {
     price: '',
     description: '',
     name_product: '',
+    age: '',
+    weight: '',
     stock: '',
     photo_product: null,
   });
@@ -29,6 +31,8 @@ const EditProduct = () => {
         price: product.price,
         description: product.description,
         name_product: product.name_product,
+        age: product.age,
+        weight: product.weight,
         stock: product.stock,
         photo_product: product.photo_product,
       });
@@ -63,13 +67,15 @@ const EditProduct = () => {
       productPayload.append('price', formData.price);
       productPayload.append('description', formData.description);
       productPayload.append('name_product', formData.name_product);
+      productPayload.append('age', formData.age);
+      productPayload.append('weight', formData.weight);
       productPayload.append('stock', formData.stock);
       if (formData.photo_product instanceof File) {
         productPayload.append('photo_product', formData.photo_product);
       }
 
       await updateProduct({ id, ...Object.fromEntries(productPayload) }).unwrap();
-      navigate('/master/product');
+      navigate('/master/produk');
     } catch (err) {
       console.error('Error saat mengedit data:', err);
     }
@@ -126,6 +132,38 @@ const EditProduct = () => {
               type="text"
               name="price"
               value={formData.price}
+              onChange={handleChange}
+              placeholder="Masukan harga"
+              className="w-full"
+            />
+          </div>
+
+          {/* Age */}
+          <div>
+            <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
+              age <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="age"
+              type="text"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              placeholder="Masukan harga"
+              className="w-full"
+            />
+          </div>
+
+          {/* Weight */}
+          <div>
+            <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-1">
+              weight <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="weight"
+              type="text"
+              name="weight"
+              value={formData.weight}
               onChange={handleChange}
               placeholder="Masukan harga"
               className="w-full"

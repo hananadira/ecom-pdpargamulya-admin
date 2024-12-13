@@ -28,11 +28,22 @@ const UserApi = apiCore.injectEndpoints({
       invalidatesTags: ['User'],
     }),
     updateUser: builder.mutation({
-      query: ({ id, ...updateUser }) => ({
-        url: `/api/users/${id}`,
-        method: 'POST',
-        body: updateUser,
-      }),
+      query: ({ id, ...updateUser }) => {
+        const userPayload = new FormData();
+        userPayload.append('_method', 'PUT'); // Override method with PUT
+        for (const key in updateUser) {
+          userPayload.append(key, updateUser[key]);
+        }
+        // If there's an image, append it to FormData
+        if (updateUser.image) {
+          userPayload.append('image', updateUser.image);
+        }
+        return {
+          url: `/api/users/${id}`,
+          method: 'POST', // Sending as POST, but we override to PUT with _method
+          body: userPayload, // Send as FormData
+        };
+      },
       invalidatesTags: ['User'],
     }),
     // updateUser: builder.mutation({

@@ -1,27 +1,42 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardBody,
   Typography,
 } from "@material-tailwind/react";
 import { useGetUsersQuery } from "../redux/services/UserApi";
+import { useGetPembeliansQuery } from "../redux/services/PembelianApi";
 
-const User = () => {
-  const { data, error, isLoading } = useGetUsersQuery();
-  console.log('Data User:', data);
+const Home = () => {
+  const { data: userData, error: userError, isLoading: userLoading } = useGetUsersQuery();
+  const { data: pembelianData, error: pembelianError, isLoading: pembelianLoading } = useGetPembeliansQuery();
 
-  // loading state 
-  if (isLoading) return <div className="text-center p-4">Loading...</div>;
+  const navigate = useNavigate();
 
-  // error state 
-  if(error) {
-    console.error('Error fetching user:', error);
+  // loading state
+  if (userLoading || pembelianLoading)
+    return <div className="text-center p-4">Loading...</div>;
+
+  // error state
+  if (userError || pembelianError) {
+    console.error("Error fetching data:", { userError, pembelianError });
     return <div className="text-center p-4 text-red-600">Terjadi kesalahan saat mengambil data.</div>;
   }
-}
 
+  // Hitung jumlah user
+  const userCount = userData?.length || 0;
 
+  // Hitung total pembelian
+  const totalPembelian = pembelianData?.reduce((acc, pembelian) => {
+    // Totalkan sub_total di setiap order_detail
+    const orderDetailTotal = pembelian.order.reduce((detailAcc, detail) => {
+      return detailAcc + parseInt(detail.total_amount.replace(/\./g, ""), 10); // Konversi dari string ke angka
+    }, 0);
+  
+    return acc + orderDetailTotal;
+  }, 0) || 0;
 
-export function Home() {
   return (
     <div className="ml-3 p-5">
       {/* Baris pertama dengan kartu yang berbeda panjang */}
@@ -32,9 +47,7 @@ export function Home() {
             <Typography variant="h5" color="blue-gray" className="mb-2">
               Master
             </Typography>
-            <Typography>
-              isi smua nya 
-            </Typography>
+            <Typography>isi smua nya</Typography>
           </CardBody>
         </Card>
 
@@ -45,7 +58,7 @@ export function Home() {
               User
             </Typography>
             <Typography variant="h1" className="text-center">
-              10
+              {userCount}
             </Typography>
           </CardBody>
         </Card>
@@ -59,9 +72,7 @@ export function Home() {
             <Typography variant="h5" color="blue-gray" className="mb-2">
               Total Pembelian
             </Typography>
-            <Typography variant="h1">
-              IDR 1M
-            </Typography>
+            <Typography variant="h1">IDR {totalPembelian.toLocaleString()}</Typography>
             <Typography variant="h6">
               <span color="green">+ IDR 2M</span> last mount
             </Typography>
@@ -74,9 +85,7 @@ export function Home() {
             <Typography variant="h5" color="blue-gray" className="mb-2">
               Pengiriman
             </Typography>
-            <Typography>
-             ada 2 nanti di sini
-            </Typography>
+            <Typography>ada 2 nanti di sini</Typography>
           </CardBody>
         </Card>
       </div>
@@ -88,14 +97,12 @@ export function Home() {
             <Typography variant="h5" color="blue-gray" className="mb-2">
               Laporan
             </Typography>
-            <Typography>
-              isi laporan di sini
-            </Typography>
+            <Typography>isi laporan di sini</Typography>
           </CardBody>
         </Card>
       </div>
     </div>
   );
-}
+};
 
 export default Home;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetPengirimansQuery, useDeletePengirimanMutation, 
+import { useGetPengirimanSelesaiQuery, useDeletePengirimanMutation, 
         useGetPengirimanQuery, useUpdateStatusKirimMutation, useUpdateStatusSampaiMutation
       } from '../../redux/services/PengirimanApi';
 import { Card, CardHeader, Typography, Button, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
@@ -9,16 +9,16 @@ import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
 
 const Pengiriman = () => {
-  const { data: pengirimansData, error: pengirimansError, isLoading: isPengirimansLoading } = useGetPengirimansQuery();
-  const { data: pengirimanData, error: pengirimanError, isLoading: isPengirimanLoading } = useGetPengirimanQuery();
-  const [deletePengiriman] = useDeletePengirimanMutation();
-  const [updateStatusKirim] = useUpdateStatusKirimMutation();
-  const [updateStatusSampai] = useUpdateStatusSampaiMutation();
+  // const { data: pengirimansData, error: pengirimansError, isLoading: isPengirimansLoading } = useGetPengirimanSelesaiQuery();
+  const { data: pengirimanData, error: pengirimanError, isLoading: isPengirimanLoading } = useGetPengirimanSelesaiQuery();
+  // const [deletePengiriman] = useDeletePengirimanMutation();
+  // const [updateStatusKirim] = useUpdateStatusKirimMutation();
+  // const [updateStatusSampai] = useUpdateStatusSampaiMutation();
 
   const navigate = useNavigate();
 
   // Debugging untuk melihat state
-  console.log('Data Pengiriman:', pengirimansData);
+  console.log('Data Pengiriman:', pengirimanData);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,69 +42,69 @@ const Pengiriman = () => {
   };
 
   // Contoh penggunaan data dan error masing-masing
-  if (isPengirimansLoading || isPengirimanLoading) {
+  if (isPengirimanLoading) {
     return <p>Loading...</p>;
   }
 
-  if (pengirimansError) {
-    console.error("Error in pengirimans:", pengirimansError);
-  }
+  // if (pengirimansError) {
+  //   console.error("Error in pengirimans:", pengirimansError);
+  // }
 
   if (pengirimanError) {
     console.error("Error in pengiriman:", pengirimanError);
   }
 
-  const getButtonText = (status) => {
-    switch (status) {
-      case '-':
-        return 'Disiapkan';
-      case 'disiapkan':
-        return 'Dalam Perjalanan';
-      case 'dalam perjalanan':
-        return 'Sudah Sampai';
-      default:
-        return 'Update Status';
-    }
-  };
+  // const getButtonText = (status) => {
+  //   switch (status) {
+  //     case '-':
+  //       return 'Disiapkan';
+  //     case 'disiapkan':
+  //       return 'Dalam Perjalanan';
+  //     case 'dalam perjalanan':
+  //       return 'Sudah Sampai';
+  //     default:
+  //       return 'Update Status';
+  //   }
+  // };
 
-  const handleButtonClick = async (id, status) => {
-    try {
-      let newStatus = '';
+  // const handleButtonClick = async (id, status) => {
+  //   try {
+  //     let newStatus = '';
 
-      if (status === '-') newStatus = 'disiapkan';
-      else if (status === 'disiapkan') newStatus = 'dalam perjalanan';
-      else if (status === 'dalam perjalanan') newStatus = 'sudah sampai';
+  //     if (status === '-') newStatus = 'disiapkan';
+  //     else if (status === 'disiapkan') newStatus = 'dalam perjalanan';
+  //     else if (status === 'dalam perjalanan') newStatus = 'sudah sampai';
       
-      if (newStatus) {
-        console.log('Updating status to:', newStatus);
+  //     if (newStatus) {
+  //       console.log('Updating status to:', newStatus);
 
-        // Update status sesuai dengan status yang diubah
-        const response = await updateStatusKirim({ id, updatedStatusKirim: newStatus }).unwrap();
+  //       // Update status sesuai dengan status yang diubah
+  //       const response = await updateStatusKirim({ id, updatedStatusKirim: newStatus }).unwrap();
 
-        console.log('Response from updateStatusKirim:', response);
+  //       console.log('Response from updateStatusKirim:', response);
 
-        // Validasi apakah update berhasil
-        if (response?.success) {
-          alert('Status berhasil diperbarui!');
-        } else {
-          throw new Error('Update status gagal di backend');
-        }
-      } else {
-        alert('Status tidak valid.');
-      }
-    } catch (error) {
-      console.error('Gagal memperbarui status:', error);
-      alert('Terjadi kesalahan saat memperbarui status.');
-    }
-  };
+  //       // Validasi apakah update berhasil
+  //       if (response?.success) {
+  //         alert('Status berhasil diperbarui!');
+  //       } else {
+  //         throw new Error('Update status gagal di backend');
+  //       }
+  //     } else {
+  //       alert('Status tidak valid.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Gagal memperbarui status:', error);
+  //     alert('Terjadi kesalahan saat memperbarui status.');
+  //   }
+  // };
 
   const indexOfLastPengiriman = currentPage * itemsPerPage;
   const indexOfFirstPengiriman = indexOfLastPengiriman - itemsPerPage;
-  const currentPengiriman = pengirimansData && pengirimansData.length > 0
-    ? pengirimansData.slice(indexOfFirstPengiriman, indexOfLastPengiriman)
+  const currentPengiriman = pengirimanData && pengirimanData.length > 0
+    ? pengirimanData.slice(indexOfFirstPengiriman, indexOfLastPengiriman)
     : [];
   
-  const totalPages = pengirimansData ? Math.ceil(pengirimansData.length / itemsPerPage) : 0;
+  const totalPages = pengirimanData ? Math.ceil(pengirimanData.length / itemsPerPage) : 0;
 
   // Render the table
   return (
@@ -139,17 +139,16 @@ const Pengiriman = () => {
               <th className="px-4 py-2 border-b">No</th>
               <th className="px-4 py-2 border-b">No. Ref</th>
               <th className="px-4 py-2 border-b">Status</th>
-              <th className="px-4 py-2 border-b">Actions</th>
+              {/* <th className="px-4 py-2 border-b">Actions</th> */}
             </tr>
           </thead>
           <tbody>
-            {currentPengiriman.length > 0 ? (
-              currentPengiriman.map((pengiriman, index) => (
+              {currentPengiriman.map((pengiriman, index) => (
                 <tr key={pengiriman.id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
                   <td className="px-4 py-2 border-b">{index + 1}</td>
-                  <td className="px-4 py-2 border-b">{pengiriman.no_ref_order}</td>
-                  <td className="px-4 py-2 border-b">{pengiriman.shipping?.shipping_status}</td>
-                  <td className="px-4 py-2 border-b">
+                  <td className="px-4 py-2 border-b">{pengiriman.order.no_ref_order}</td>
+                  <td className="px-4 py-2 border-b">{pengiriman.shipping_status}</td>
+                  {/* <td className="px-4 py-2 border-b">
                     <Menu>
                       <MenuHandler>
                         <Button variant="text" color="blue-gray" className="flex items-center">
@@ -169,14 +168,10 @@ const Pengiriman = () => {
                         <MenuItem onClick={() => handleDelete(pengiriman.id)}>Delete</MenuItem>
                       </MenuList>
                     </Menu>
-                  </td>
+                  </td> */}
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5" className="text-center p-4">Tidak ada data</td>
-              </tr>
-            )}
+              
+            ))}
           </tbody>
         </table>
         <div className="flex justify-between items-center mt-4">

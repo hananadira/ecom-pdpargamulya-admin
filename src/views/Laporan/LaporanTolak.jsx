@@ -67,7 +67,7 @@ const LaporanTolak = () => {
               Laporan List
             </Typography>
             <Typography color="gray" className="mt-1 font-normal">
-              See information about report not received
+              See information about report received
             </Typography>
           </div>
           {/* <div className="flex gap-2">

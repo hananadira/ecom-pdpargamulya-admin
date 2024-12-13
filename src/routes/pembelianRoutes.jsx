@@ -1,4 +1,5 @@
 // pembelianRoutes.jsx
+// import React from 'react';
 import { Routes, Route } from "react-router-dom";
 import Pembelian from '../views/Pembelian/Pembelian.jsx';
 // import PembelianCreate from '../views/Pembelian/Create.jsx';

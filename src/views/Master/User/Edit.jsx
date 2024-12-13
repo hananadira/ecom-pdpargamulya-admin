@@ -71,10 +71,11 @@ const EditUser = () => {
       userPayload.append('address', formData.address);
       userPayload.append('fullname', formData.fullname);
       userPayload.append('phone_number', formData.phone_number);
-      userPayload.append('_method', 'PUT')
-      if (formData.image) {
-        userPayload.append('image', formData.image); // Add image if it exists
-      }
+      userPayload.append('image', formData.image);
+      // userPayload.append('_method', 'PUT')
+      // if (formData.image) {
+      //   userPayload.append('image', formData.image); // Add image if it exists
+      // }
 
       await updateUser({ id, ...formData }).unwrap(); // Update the user
       navigate('/master/user'); // Redirect to user list after successful update

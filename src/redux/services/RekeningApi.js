@@ -5,6 +5,14 @@ const RekeningApi = apiCore.injectEndpoints({
   reducerPath: 'RekeningApi',
   tagTypes: ['Rekening'],
   endpoints: (builder) => ({
+    createRekening: builder.mutation({
+      query: (newRekening) => ({
+        url: '/api/rekening',
+        method: 'POST',
+        body: newRekening,
+      }),
+      invalidatesTags: ['Rekening'],
+    }),
     getRekenings: builder.query({
       query: () => '/api/rekening',
       transformResponse: (response) => {
@@ -20,14 +28,7 @@ const RekeningApi = apiCore.injectEndpoints({
       },
     }),
 
-    createRekening: builder.mutation({
-      query: (newRekening) => ({
-        url: '/api/rekening',
-        method: 'POST',
-        body: newRekening,
-      }),
-      invalidatesTags: ['Rekening'],
-    }),
+    
     updateRekening: builder.mutation({
       query: ({ id, ...updatedRekening }) => ({
         url: `/api/rekening/${id}`,

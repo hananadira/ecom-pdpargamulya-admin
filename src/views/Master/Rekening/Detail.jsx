@@ -47,17 +47,6 @@ const DetailProduct = () => {
 
       <div className="flex flex-col space-y-5">
       <Card className="w-full max-w-[78rem] flex-row">
-      {/* <CardHeader
-        shadow={false}
-        floated={false}
-        className="m-0 w-2/5 shrink-0 rounded-r-none"
-      >
-        <img
-          src={data.payment_master_image}
-          alt="card-image"
-          className="h-full w-full object-cover"
-        />
-      </CardHeader> */}
       <CardBody>
         <Typography variant="h6" color="gray" className="mb-4 uppercase">
           Rekening
@@ -94,7 +83,7 @@ const DetailProduct = () => {
         className="m-0 w-2/5 shrink-0 rounded-r-none"
       >
         <img
-          src={data.payment_master_image}
+          src={data.data?.payment_master_image}
           alt="card-image"
           className="h-full w-full object-cover"
         />

@@ -21,11 +21,10 @@ const initialState = {
 // Pembelian slice
 const pembelianSlice = createSlice({
   name: 'pembelian',
-  initialState,
+  initialState: [],
   reducers: {
     removePembelianData: (state, action) => {
-      // Menghapus data berdasarkan ID
-      state.pembelianApi = state.pembelianApi.filter(item => item.id !== action.payload);
+      return state.filter((item) => item.id !== action.payload); // Menghapus item berdasarkan id
     },
   },
   extraReducers: (builder) => {

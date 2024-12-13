@@ -36,6 +36,7 @@ const Sidebar = () => {
         { path: "/master/produk", name: "Produk" },
         { path: "/master/kategori", name: "Kategori" },
         { path: "/master/rekening", name: "Rekening" },
+        { path: "/master/pengiriman", name: "Pengiriman" },
         { path: "/master/page", name: "Page" },
         { path: "/master/section", name: "Section" },
         { path: "/master/content", name: "Content" },

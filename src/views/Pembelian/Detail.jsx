@@ -1,6 +1,8 @@
+import React from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux"; // Import dispatch
 import { useGetPembelianQuery } from "../../redux/services/PembelianApi"; // Import hook untuk mengambil data pembelian
+import { useSetLaporansSetujuMutation, useSetLaporansTolakMutation } from "../../redux/services/LaporanApi";
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
@@ -11,6 +13,8 @@ const DetailPembelian = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch(); // Menggunakan dispatch dari Redux
   const { data, error, isLoading } = useGetPembelianQuery(id);
+  const [setStatusBerhasil] = useSetLaporansSetujuMutation();  // Memanggil hook di dalam komponen
+  const [setStatusGagal] = useSetLaporansTolakMutation();  // Memanggil hook di dalam komponen
 
   // Debugging untuk memeriksa data
   console.log('Data API:', data);
@@ -35,22 +39,43 @@ const DetailPembelian = () => {
   };
 
   // Fungsi untuk menghapus data dan mengarahkan halaman berdasarkan Accepted
-  const handleAccepted = () => {
-    dispatch(removePembelianData(id));
+  const handleAccepted = async (id) => {
+    try {
+      // Panggil API untuk update status
+      await setStatusBerhasil(id).unwrap();
 
-    navigate('/pengiriman');
-    setTimeout(() => {
-      navigate('/laporan/konfirmasi');
-    }, 1000);
+      // Setelah berhasil, hapus data di Redux store
+      dispatch(removePembelianData(id));
+
+      // Navigasi ke halaman lain
+      navigate('/pengiriman');
+      setTimeout(() => {
+        navigate('/laporan/konfirmasi');
+      }, 800);
+    } catch (error) {
+      console.error('Gagal mengupdate status:', error);
+      alert('Terjadi kesalahan saat mengupdate status.');
+    }
   };
 
-  // Fungsi untuk menghapus data dan mengarahkan halaman berdasarkan Rejected
-  const handleRejected = () => {
-    dispatch(removePembelianData(id));
+  // Fungsi untuk menghapus data dan mengarahkan halaman berdasarkan Accepted
+  const handleRejected = async (id) => {
+    try {
+      // Panggil API untuk update status
+      await setStatusGagal(id).unwrap();
 
-    setTimeout(() => {
-      navigate('/laporan/batalkan');
-    }, 1000);
+      // Setelah berhasil, hapus data di Redux store
+      dispatch(removePembelianData(id));
+
+      // Navigasi ke halaman lain
+      navigate('/pengiriman');
+      setTimeout(() => {
+        navigate('/laporan/batalkan');
+      }, 800);
+    } catch (error) {
+      console.error('Gagal mengupdate status:', error);
+      alert('Terjadi kesalahan saat mengupdate status.');
+    }
   };
 
   return (
@@ -92,43 +117,52 @@ const DetailPembelian = () => {
         {/* Card 2 */}
         <Card className="w-full">
           <CardBody>
-            <Typography variant="h5" color="blue-gray" className="mb-2">
-              Shipping Information
+            <Typography variant="h5" color="blue-gray" className="mb-4">
+              Detail Produk
             </Typography>
 
-            <div className="flex mb-2">
-              <div className="flex-1">
-                <Typography>Product</Typography>
-                <Typography className="font-bold">{data.order_detail[0]?.product?.name_product}</Typography>
-              </div>
-              <div className="flex-1">
-                <Typography>Category</Typography>
-                <Typography className="font-bold mb-5">{data.order_detail[0]?.product?.category_id}</Typography>
-                <Typography>Bukti Transaksi</Typography>
-                <Typography className="font-bold">{data.order_detail[0]?.product?.description}</Typography>
-              </div>
-            </div>
+            {/* Mulai iterasi pada data order_detail */}
+            {data.order_detail.map((detail, index) => (
+              <div key={detail.id} className="mb-6 border-b pb-4">
+                <Typography variant="h6" className="font-bold mb-2">
+                  Produk #{index + 1}
+                </Typography>
 
-            <div>
-              <div className="flex-1">
-                <Typography>Total Product</Typography>
-                <Typography className="font-bold mb-5">{data.order_detail.quantity}</Typography>
+                <div className="flex items-center mb-4">
+                  <img
+                    src={detail.product?.photo_product || "https://via.placeholder.com/150"}
+                    alt={detail.product?.name_product || "Produk"}
+                    className="w-20 h-20 rounded-lg mr-4"
+                  />
+                  <div>
+                    <Typography variant="h6">{detail.product?.name_product || "Produk Tidak Diketahui"}</Typography>
+                    <Typography>Deskripsi: {detail.product?.description || "Tidak Ada Deskripsi"}</Typography>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Typography className="text-gray-500">Jumlah</Typography>
+                    <Typography className="font-bold">{detail.quantity}</Typography>
+                  </div>
+                  <div>
+                    <Typography className="text-gray-500">Harga Satuan</Typography>
+                    <Typography className="font-bold">Rp{Number(detail.price_unit).toLocaleString('id-ID')}</Typography>
+                  </div>
+                  <div>
+                    <Typography className="text-gray-500">Total Harga</Typography>
+                    <Typography className="font-bold">Rp{Number(detail.sub_total).toLocaleString('id-ID')}</Typography>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1">
-                <Typography>Harga Produk</Typography>
-                <Typography className="font-bold mb-5">{data.order_detail[0]?.product?.price}</Typography>
-              </div>
-              <div className="flex-1">
-                <Typography>Total Harga</Typography>
-                <Typography className="font-bold mb-5">{data.order_detail.sub_total}</Typography>
-              </div>
-            </div>
+            ))}
           </CardBody>
         </Card>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-          <Button color="green" onClick={handleAccepted}>Accepted</Button>
-          <Button color="red" onClick={handleRejected}>Rejected</Button>
+          {/* Perbaiki onClick */}
+          <Button color="green" onClick={() => handleAccepted(id)}>Accepted</Button>
+          <Button color="red" onClick={() => handleRejected(id)}>Rejected</Button>
         </div>
       </div>
     </div>

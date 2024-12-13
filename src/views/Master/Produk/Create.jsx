@@ -7,10 +7,12 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({
-    category_id: '',
+    category_name: '',
     price: '',
     description: '',
     name_product: '',
+    age: '',
+    weight: '',
     stock: '',
     photo_product: null,
   });
@@ -18,13 +20,17 @@ const AddProduct = () => {
   const { data: categories = [], isLoading } = useGetKategoriesQuery();
   const navigate = useNavigate();
 
-  // Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  // Fungsi untuk menangani perubahan input teks dan dropdown
+  const handleChange = (e, fieldName = null) => {
+    if (e?.target) {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    } else if (fieldName) {
+      setFormData({ ...formData, [fieldName]: e });
+    }
   };
 
-  // Handle file input change
+  // Fungsi untuk menangani perubahan input file
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -37,22 +43,35 @@ const AddProduct = () => {
     }
   };
 
-  // Handle form submission
+  // Fungsi untuk menangani submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validasi input
+    const requiredFields = ['category_name', 'price', 'description', 'name_product', 'stock', 'photo_product'];
+    const missingFields = requiredFields.filter((field) => !formData[field]);
+
+    if (missingFields.length > 0) {
+      alert(`Field berikut wajib diisi: ${missingFields.join(', ')}`);
+      return;
+    }
+
     try {
       const productPayload = new FormData();
-      productPayload.append('category_id', formData.category_id);
+      productPayload.append('category_name', formData.category_name);
       productPayload.append('price', formData.price);
       productPayload.append('description', formData.description);
       productPayload.append('name_product', formData.name_product);
+      productPayload.append('age', formData.age);
+      productPayload.append('weight', formData.weight);
       productPayload.append('stock', formData.stock);
       productPayload.append('photo_product', formData.photo_product);
 
       await createProduct(productPayload).unwrap();
-      navigate('/master/product');
+      navigate('/master/produk');
     } catch (err) {
       console.error('Error saat menambah data:', err);
+      alert('Terjadi kesalahan saat menambah data. Silakan periksa kembali input Anda.');
     }
   };
 
@@ -64,31 +83,36 @@ const AddProduct = () => {
   return (
     <div className="container mx-auto p-8 bg-white shadow-md rounded-md">
       <div className="flex items-center mb-5">
-        <Button variant="text" onClick={() => navigate('/master/produk')} className="material-icons mr-2">
+        <Button variant="text" onClick={() => navigate('/master/product')} className="material-icons mr-2">
           <FontAwesomeIcon icon={faArrowLeft} />
         </Button>
         <Typography variant="h5" className="font-bold">Tambah Produk</Typography>
-        <Typography className="ml-auto text-gray-500"> 
-          {formatDate()} 
+        <Typography className="ml-auto text-gray-500">
+          {formatDate()}
         </Typography>
       </div>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-6">
-        {/* Kiri - Category, Price, Description */}
+        {/* Kolom kiri */}
         <div className="space-y-4">
           {/* Category */}
           <div>
-            <label htmlFor="category_id" className="block text-sm font-medium text-gray-700 mb-1">
-              Category <span className="text-red-500">*</span>
+            <label htmlFor="category_name" className="block text-sm font-medium text-gray-700 mb-1">
+              Kategori <span className="text-red-500">*</span>
             </label>
             <div className="w-72">
-              <Select name="category_id" onChange={handleChange} value={formData.category_id} required>
+              <Select
+                name="category_name"
+                onChange={(value) => handleChange(value, 'category_name')}
+                value={formData.category_name}
+                required
+              >
                 {isLoading ? (
                   <Option>Loading...</Option>
                 ) : (
                   categories.map((category) => (
-                    <Option key={category.id} value={category.id}>
-                      {category.name_category} {/* Pastikan menggunakan name_category di sini */}
+                    <Option key={category.id} value={category.name_category}>
+                      {category.name_category}
                     </Option>
                   ))
                 )}
@@ -99,7 +123,7 @@ const AddProduct = () => {
           {/* Price */}
           <div>
             <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
-              Price <span className="text-red-500">*</span>
+              Harga <span className="text-red-500">*</span>
             </label>
             <Input
               id="price"
@@ -112,10 +136,43 @@ const AddProduct = () => {
             />
           </div>
 
+          {/* Age */}
+          <div>
+            <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-1">
+              Age <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="age"
+              type="text"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              placeholder="Masukan usia"
+              className="w-full"
+            />
+          </div>
+
+          {/* Weight */}
+          <div>
+            <label htmlFor="weight" className="block text-sm font-medium text-gray-700 mb-1">
+              Weight <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="weight"
+              type="text"
+              name="weight"
+              value={formData.weight}
+              onChange={handleChange}
+              placeholder="Masukan berat domba"
+              className="w-full"
+            />
+          </div>
+
+
           {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-              Description <span className="text-red-500">*</span>
+              Deskripsi <span className="text-red-500">*</span>
             </label>
             <textarea
               id="description"
@@ -129,7 +186,7 @@ const AddProduct = () => {
           </div>
         </div>
 
-        {/* Kanan - Nama Produk, Stock, Image */}
+        {/* Kolom kanan */}
         <div className="space-y-4">
           {/* Nama Produk */}
           <div>
@@ -150,7 +207,7 @@ const AddProduct = () => {
           {/* Stock */}
           <div>
             <label htmlFor="stock" className="block text-sm font-medium text-gray-700 mb-1">
-              Stock <span className="text-red-500">*</span>
+              Stok <span className="text-red-500">*</span>
             </label>
             <Input
               id="stock"
@@ -158,15 +215,15 @@ const AddProduct = () => {
               name="stock"
               value={formData.stock}
               onChange={handleChange}
-              placeholder="Masukan jumlah stock produk"
+              placeholder="Masukan jumlah stok"
               className="w-full"
             />
           </div>
 
-          {/* Image */}
+          {/* Gambar */}
           <div>
             <label htmlFor="photo_product" className="block text-sm font-medium text-gray-700 mb-1">
-              Image <span className="text-red-500">*</span>
+              Gambar <span className="text-red-500">*</span>
             </label>
             <input
               id="photo_product"
@@ -183,13 +240,13 @@ const AddProduct = () => {
                   className="max-h-full max-w-full object-cover"
                 />
               ) : (
-                <span className="text-gray-500">Preview Image</span>
+                <span className="text-gray-500">Preview Gambar</span>
               )}
             </div>
           </div>
         </div>
 
-        {/* Submit Button */}
+        {/* Tombol Submit */}
         <div className="col-span-2 text-right">
           <Button type="submit" variant="gradient" className="px-8 py-2">
             Submit

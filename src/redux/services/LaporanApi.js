@@ -18,12 +18,24 @@ const LaporanApi = apiCore.injectEndpoints({
                 return response.data || [];
             },
         }),
+        setLaporansSetuju: builder.mutation({
+            query: (id) => ({
+                url: `/api/order/statusBerhasil/${id}`,
+                method: 'PUT',
+            }),
+        }),
         getLaporansTolak: builder.query({
             query: () => '/api/order/statusGagal',
             transformResponse: (response) => {
                 console.log("Raw response:", response);
                 return response.data || [];
             },
+        }),
+        setLaporansTolak: builder.mutation({
+            query: (id) => ({
+                url: `/api/order/statusGagal/${id}`,
+                method: 'PUT',
+            }),
         }),
         getLaporan: builder.query({
             query: () => `/api/order/status/${id}`,
@@ -45,6 +57,8 @@ const LaporanApi = apiCore.injectEndpoints({
 export const {
     useGetLaporansAllQuery,
     useGetLaporansSetujuQuery,
+    useSetLaporansSetujuMutation,
+    useSetLaporansTolakMutation,
     useGetLaporansTolakQuery,
     useGetLaporanQuery,
     useDeleteLaporanMutation,

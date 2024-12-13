@@ -1,3 +1,4 @@
+import React from 'react';
 import { Routes, Route } from "react-router-dom";
 import Laporan from '../views/Laporan/Laporan.jsx';
 import LaporanKonfirmasi from '../views/Laporan/LaporanSetuju.jsx';

@@ -4,6 +4,7 @@ import Pengiriman from '../views/Pengiriman/Pengiriman.jsx';
 // import PengirimanCreate from '../views/Pengiriman/Create.jsx';
 import PengirimanEdit from '../views/Pengiriman/Edit.jsx';
 import PengirimanDetail from '../views/Pengiriman/Detail.jsx';
+import PengirimanSelesai from '../views/Pengiriman/PengirimanSelesai.jsx';
 import PengirimanSetuju from '../views/Pengiriman/Setuju.jsx';
 
 function PengirimanRoutes() {
@@ -11,6 +12,7 @@ function PengirimanRoutes() {
         <Routes>
             <Route index element={<Pengiriman />} />  {/* Rute default ke Pengiriman */}
             {/* <Route path="create" element={<PengirimanCreate />} /> */}
+            <Route path="selesai" element={<PengirimanSelesai />} />
             <Route path="setuju" element={<PengirimanSetuju />} />
             <Route path="edit/:id" element={<PengirimanEdit />} />
             <Route path="detail/:id" element={<PengirimanDetail />} />
