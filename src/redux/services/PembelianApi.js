@@ -19,6 +19,10 @@ const PembelianApi = apiCore.injectEndpoints({
       query: (id) => `/api/orderDetail/${id}`,
       providesTags: ['Pembelian'], // Menandai data untuk cache
     }),
+    // getPPayment: builder.query({
+    //   query: (id) => `/api/payment/${id}`,
+    //   providesTags: ['Pembelian'], // Menandai data untuk cache
+    // }),
 
     // Mutation untuk memperbarui data pembelian
     updatePembelian: builder.mutation({
@@ -66,6 +70,7 @@ const PembelianApi = apiCore.injectEndpoints({
 export const {
   useGetPembeliansQuery,
   useGetPembelianQuery,
+  // useGetPaymentQuery,
   useGetPembelianAcceptQuery,
   useGetPembelianRejectQuery,
   useUpdatePembelianMutation,

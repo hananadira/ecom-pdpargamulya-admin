@@ -23,6 +23,8 @@ const EditProduct = () => {
   const { data: categories = [], isLoading: isCategoriesLoading } = useGetKategoriesQuery();
   const navigate = useNavigate();
 
+  
+
   // Load existing product data
   useEffect(() => {
     if (product) {
@@ -33,6 +35,7 @@ const EditProduct = () => {
         name_product: product.name_product,
         age: product.age,
         weight: product.weight,
+        health_status: product.health_status,
         stock: product.stock,
         photo_product: product.photo_product,
       });
@@ -44,6 +47,7 @@ const EditProduct = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
 
   // Handle file input change
   const handleFileChange = (e) => {
@@ -69,6 +73,7 @@ const EditProduct = () => {
       productPayload.append('name_product', formData.name_product);
       productPayload.append('age', formData.age);
       productPayload.append('weight', formData.weight);
+      productPayload.append('health_status', formData.health_status);
       productPayload.append('stock', formData.stock);
       if (formData.photo_product instanceof File) {
         productPayload.append('photo_product', formData.photo_product);
@@ -187,7 +192,7 @@ const EditProduct = () => {
           </div>
         </div>
 
-        {/* Kanan - Nama Produk, Stock, Image */}
+        {/* Kanan - Nama Produk, Stock, Health, Image */}
         <div className="space-y-4">
           {/* Nama Produk */}
           <div>
@@ -201,6 +206,22 @@ const EditProduct = () => {
               value={formData.name_product}
               onChange={handleChange}
               placeholder="Masukan nama produk"
+              className="w-full"
+            />
+          </div>
+
+          {/* Health */}
+          <div>
+            <label htmlFor="health_status" className="block text-sm font-medium text-gray-700 mb-1">
+              Health Status <span className="text-red-500">*</span>
+            </label>
+            <Input
+              id="health_status"
+              type="text"
+              name="health_status"
+              value={formData.health_status}
+              onChange={handleChange}
+              placeholder="Masukan health status produk"
               className="w-full"
             />
           </div>

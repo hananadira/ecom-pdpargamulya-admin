@@ -3,7 +3,7 @@ import { useAsyncError, useNavigate } from "react-router-dom";
 import { useGetProductsQuery, useDeleteProductMutation } from '../../../redux/services/ProductApi';
 import { Card, Typography, Button, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faEye, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Product = () => {
   const { data, error, isLoading } = useGetProductsQuery();
@@ -71,25 +71,49 @@ const Product = () => {
               currentProduct.map((product, index) => (
                 <tr key={product.id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
                   <td className="px-4 py-2 border-b">{index + 1}</td>
-                  <td className="px-4 py-2 border-b">{product.name_product}</td>
+                  <td className="px-4 py-2 border-b flex items-center space-x-4">
+                    <img 
+                      src={product.photo_product}
+                      alt={product.name_product} 
+                      className="w-12 h-12 object-cover rounded"
+                    />
+                    <span>{product.name_product}</span>
+                  </td>
                   <td className="px-4 py-2 border-b">
                     <div className="max-w-xs break-words">{product.description}</div>
                   </td>
                   <td className="px-4 py-2 border-b">{product.price}</td>
                   <td className="px-4 py-2 border-b">{product.stock}</td>
                   <td className="px-4 py-2 border-b">
-                    <Menu>
-                      <MenuHandler>
-                        <Button variant="text" color="blue-gray" className="flex items-center">
-                          <FontAwesomeIcon icon={faEllipsisVertical} className="w-5 h-5" />
-                        </Button>
-                      </MenuHandler>
-                      <MenuList>
-                        <MenuItem onClick={() => navigate(`/master/produk/detail/${product.id}`)}>Detail</MenuItem>
-                        <MenuItem onClick={() => navigate(`/master/produk/edit/${product.id}`)}>Edit</MenuItem>
-                        <MenuItem onClick={() => handleDelete(product.id)}>Delete</MenuItem>
-                      </MenuList>
-                    </Menu>
+                  <Menu>
+                  <div className="flex flex-row items-center">
+                      <Button
+                        variant="text"
+                        color="blue-gray"
+                        className="flex items-center p-1"
+                        onClick={() => navigate(`/master/produk/detail/${product.id}`)}
+                      >
+                        <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="blue-gray"
+                        className="flex items-center p-4"
+                        onClick={() => navigate(`/master/produk/edit/${product.id}`)}
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="blue-gray"
+                        className="flex items-center p-1"
+                        onClick={() => handleDelete(product.id)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  </Menu>
+
                   </td>
                 </tr>
               ))

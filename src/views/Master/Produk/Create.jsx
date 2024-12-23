@@ -48,7 +48,7 @@ const AddProduct = () => {
     e.preventDefault();
 
     // Validasi input
-    const requiredFields = ['category_name', 'price', 'description', 'name_product', 'stock', 'photo_product'];
+    const requiredFields = ['category_name', 'price', 'description', 'name_product', 'age', 'weight', 'stock', 'photo_product'];
     const missingFields = requiredFields.filter((field) => !formData[field]);
 
     if (missingFields.length > 0) {
@@ -67,6 +67,8 @@ const AddProduct = () => {
       productPayload.append('stock', formData.stock);
       productPayload.append('photo_product', formData.photo_product);
 
+      console.log('Payload:', [...productPayload.entries()]); // Debug payload
+      
       await createProduct(productPayload).unwrap();
       navigate('/master/produk');
     } catch (err) {

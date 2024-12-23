@@ -1,19 +1,15 @@
-import React from 'react';
-import { Routes, Route } from "react-router-dom";
-import Laporan from '../views/Laporan/Laporan.jsx';
-import LaporanKonfirmasi from '../views/Laporan/LaporanSetuju.jsx';
-import LaporanBatalkan from '../views/Laporan/LaporanTolak.jsx';
-// import LaporanDetail from '../views/Laporan/Detail.jsx';
+// LaporanRoutes.jsx
+import { Routes, Route } from 'react-router-dom';
+import ReportForm from '../views/Laporan/Laporan';
+import ReportPage from '../views/Laporan/LaporanPembayaranCustomer';
 
 function LaporanRoutes() {
-    return (
-        <Routes>
-            <Route index element={<Laporan />} />  {/* Rute default ke Laporan */}
-            <Route path="konfirmasi" element={<LaporanKonfirmasi />} />
-            <Route path="batalkan" element={<LaporanBatalkan />} />
-            {/* <Route path="detail/:id" element={<LaporanDetail />} /> */}
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route path="/" element={<ReportForm />} />
+      <Route path="/reports/:reportType" element={<ReportPage />} />
+    </Routes>
+  );
 }
 
 export default LaporanRoutes;

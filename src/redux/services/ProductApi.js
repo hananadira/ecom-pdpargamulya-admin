@@ -40,10 +40,10 @@ const ProductApi = apiCore.injectEndpoints({
     createProduct: builder.mutation({
       query: (newProduct) => ({
         url: '/api/products',
-        method: 'POST',
+        method: 'POST', 
         body: newProduct,
       }),
-      invalidatesTags: ['Product'],
+      invalidatesTags: ['Products'],
     }),
     createKategori: builder.mutation({
       query: (newKategori) => ({

@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GoBell } from 'react-icons/go';
 
 const Header = () => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);  // Untuk menampilkan menu dropdown
+  const [isLoggedIn, setIsLoggedIn] = useState(true);  // Status login (bisa diganti dengan state global atau Redux)
+
+  // Fungsi untuk logout
+  const handleLogout = () => {
+    // Logika logout (misalnya hapus token, clear session, etc)
+    setIsLoggedIn(false);
+    setDropdownOpen(false); // Menutup dropdown setelah logout
+    console.log("User logged out");
+  };
+
   return (
     <div className='flex justify-between items-center p-4'>
       <div className='p-5'>
@@ -21,10 +32,26 @@ const Header = () => {
             <GoBell size={28} />
             <span className='absolute top-0 right-0 -mt-1 -mr-1 flex justify-center items-center bg-indigo-600 text-white font-semibold text-[10px] w-5 h-4 rounded-full border-2 border-white'>9</span>
           </button>
-          <img 
-            className='w-8 h-8 rounded-full border-2 border-indigo-400'   
-            src="/img/logo.png" alt="Logo" 
-          />
+
+          {/* User image and dropdown */}
+          <div className='relative'>
+            <img 
+              className='w-8 h-8 rounded-full border-2 border-indigo-400 cursor-pointer'   
+              src="/img/logo.png" 
+              alt="Logo" 
+              onClick={() => setDropdownOpen(!dropdownOpen)}  // Toggle dropdown menu
+            />
+            {dropdownOpen && isLoggedIn && (
+              <div className='absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg border'>
+                <button 
+                  onClick={handleLogout} 
+                  className='w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100'
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

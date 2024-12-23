@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetRekeningsQuery, useDeleteRekeningMutation } from '../../../redux/services/RekeningApi';
 import { Card, Typography, Button, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faEye, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const Rekening = () => {
   const { data, error, isLoading } = useGetRekeningsQuery();
@@ -80,17 +80,33 @@ const Rekening = () => {
                   <td className="px-4 py-2 border-b">{rekening.payment_method}</td>
                   <td className="px-4 py-2 border-b">
                     <Menu>
-                      <MenuHandler>
-                        <Button variant="text" color="blue-gray" className="flex items-center">
-                          <FontAwesomeIcon icon={faEllipsisVertical} className="w-5 h-5" />
-                        </Button>
-                      </MenuHandler>
-                      <MenuList>
-                        <MenuItem onClick={() => navigate(`/master/rekening/detail/${rekening.id}`)}>Detail</MenuItem>
-                        <MenuItem onClick={() => navigate(`/master/rekening/edit/${rekening.id}`)}>Edit</MenuItem>
-                        <MenuItem onClick={() => handleDelete(rekening.id)}>Delete</MenuItem>
-                      </MenuList>
-                    </Menu>
+                  <div className="flex flex-row items-center">
+                      <Button
+                        variant="text"
+                        color="blue-gray"
+                        className="flex items-center p-1"
+                        onClick={() => navigate(`/master/rekening/detail/${rekening.id}`)}
+                      >
+                        <FontAwesomeIcon icon={faEye} className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="blue-gray"
+                        className="flex items-center p-4"
+                        onClick={() => navigate(`/master/rekening/edit/${rekening.id}`)}
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} className="w-5 h-5" />
+                      </Button>
+                      <Button
+                        variant="text"
+                        color="blue-gray"
+                        className="flex items-center p-1"
+                        onClick={() => handleDelete(rekening.id)}
+                      >
+                        <FontAwesomeIcon icon={faTrash} className="w-5 h-5" />
+                      </Button>
+                    </div>
+                  </Menu>
                   </td>
                 </tr>
               ))

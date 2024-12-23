@@ -24,7 +24,7 @@ const RekeningApi = apiCore.injectEndpoints({
       query: (id) => `/api/rekening/${id}`,
       transformResponse: (response) => {
         console.log("raw response:", response); // Tambahkan ini
-        return response.data; // Sesuaikan jika perlu
+        return response.data.data; // Sesuaikan jika perlu
       },
     }),
 

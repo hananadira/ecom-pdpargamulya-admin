@@ -148,27 +148,6 @@ const Pengiriman = () => {
                   <td className="px-4 py-2 border-b">{index + 1}</td>
                   <td className="px-4 py-2 border-b">{pengiriman.order.no_ref_order}</td>
                   <td className="px-4 py-2 border-b">{pengiriman.shipping_status}</td>
-                  {/* <td className="px-4 py-2 border-b">
-                    <Menu>
-                      <MenuHandler>
-                        <Button variant="text" color="blue-gray" className="flex items-center">
-                          <FontAwesomeIcon icon={faEllipsisVertical} className="w-5 h-5" />
-                        </Button>
-                      </MenuHandler>
-                      <MenuList>
-                        <MenuItem>
-                          <Button 
-                            color="blue" 
-                            onClick={() => handleButtonClick(pengiriman.id, pengiriman.shipping?.shipping_status)}
-                          >
-                            {getButtonText(pengiriman.shipping?.shipping_status)}
-                          </Button>
-                        </MenuItem>
-                        <MenuItem onClick={() => navigate(`/pengiriman/detail/${pengiriman.id}`)}>Detail</MenuItem>
-                        <MenuItem onClick={() => handleDelete(pengiriman.id)}>Delete</MenuItem>
-                      </MenuList>
-                    </Menu>
-                  </td> */}
                 </tr>
               
             ))}

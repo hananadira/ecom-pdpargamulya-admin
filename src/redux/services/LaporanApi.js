@@ -4,6 +4,15 @@ const LaporanApi = apiCore.injectEndpoints({
     reducerPath: 'LaporanApi',
     tagTypes: ["Laporan"],
     endpoints: (builder) => ({
+
+        getReport: builder.query({
+            query: ({ reportType, start_date, end_date }) => ({
+                url: `/api/${reportType}?start_date=${start_date}&end_date=${end_date}`,
+                params: { start_date, end_date }, // Pastikan params sudah sesuai
+            }),
+        }),
+
+
         getLaporansAll: builder.query({
             query: () => '/api/order/status',
             transformResponse: (response) => {
@@ -62,6 +71,7 @@ export const {
     useGetLaporansTolakQuery,
     useGetLaporanQuery,
     useDeleteLaporanMutation,
+    useLazyGetReportQuery,
 } = LaporanApi;
 
 export default LaporanApi;

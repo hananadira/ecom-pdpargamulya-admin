@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux"; // Import dispatch
 import { useGetPembelianQuery } from "../../redux/services/PembelianApi"; // Import hook untuk mengambil data pembelian
+import { useGetPaymentQuery } from "../../redux/services/PaymentApi"; // Hook untuk data pembayaran
 import { useSetLaporansSetujuMutation, useSetLaporansTolakMutation } from "../../redux/services/LaporanApi";
 import { Card, CardBody, Typography, Button } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -13,22 +14,22 @@ const DetailPembelian = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch(); // Menggunakan dispatch dari Redux
   const { data, error, isLoading } = useGetPembelianQuery(id);
-  const [setStatusBerhasil] = useSetLaporansSetujuMutation();  // Memanggil hook di dalam komponen
-  const [setStatusGagal] = useSetLaporansTolakMutation();  // Memanggil hook di dalam komponen
+  const { data: paymentData, error: paymentError, isLoading: isLoadingPayment } = useGetPaymentQuery(id);
+  const [setStatusBerhasil] = useSetLaporansSetujuMutation();  
+  const [setStatusGagal] = useSetLaporansTolakMutation();  
 
   // Debugging untuk memeriksa data
-  console.log('Data API:', data);
-  console.log('Error API:', error);
-  console.log('Loading:', isLoading);
+  console.log('Data Pembelian:', data);
+  console.log('Data Pembayaran:', paymentData);
 
   // Handling loading, error, dan tidak ada data
-  if (isLoading) return <div className="text-center p-4">Loading...</div>;
-  if (error) {
-    console.error('Error fetching user:', error);
+  if (isLoading || isLoadingPayment) return <div className="text-center p-4">Loading...</div>;
+  if (error || paymentError) {
+    console.error('Error fetching data:', error || paymentError);
     return <div className="text-center p-4 text-red-600">Terjadi kesalahan saat mengambil data.</div>;
   }
 
-  if (!data) {
+  if (!data || !paymentData) {
     return <div className="text-center p-4 text-red-600">Data tidak ditemukan.</div>;
   }
 
@@ -41,13 +42,8 @@ const DetailPembelian = () => {
   // Fungsi untuk menghapus data dan mengarahkan halaman berdasarkan Accepted
   const handleAccepted = async (id) => {
     try {
-      // Panggil API untuk update status
       await setStatusBerhasil(id).unwrap();
-
-      // Setelah berhasil, hapus data di Redux store
-      dispatch(removePembelianData(id));
-
-      // Navigasi ke halaman lain
+      dispatch(removePembelianData(id)); // Hapus data di Redux
       navigate('/pengiriman');
       setTimeout(() => {
         navigate('/laporan/konfirmasi');
@@ -58,16 +54,10 @@ const DetailPembelian = () => {
     }
   };
 
-  // Fungsi untuk menghapus data dan mengarahkan halaman berdasarkan Accepted
   const handleRejected = async (id) => {
     try {
-      // Panggil API untuk update status
       await setStatusGagal(id).unwrap();
-
-      // Setelah berhasil, hapus data di Redux store
-      dispatch(removePembelianData(id));
-
-      // Navigasi ke halaman lain
+      dispatch(removePembelianData(id)); // Hapus data di Redux
       navigate('/pengiriman');
       setTimeout(() => {
         navigate('/laporan/batalkan');
@@ -97,7 +87,6 @@ const DetailPembelian = () => {
       </div>
 
       <div className="flex flex-col space-y-5">
-        {/* Card 1 */}
         <Card className="w-full">
           <CardBody className="flex items-center">
             <img
@@ -114,14 +103,12 @@ const DetailPembelian = () => {
           </CardBody>
         </Card>
 
-        {/* Card 2 */}
         <Card className="w-full">
           <CardBody>
             <Typography variant="h5" color="blue-gray" className="mb-4">
               Detail Produk
             </Typography>
 
-            {/* Mulai iterasi pada data order_detail */}
             {data.order_detail.map((detail, index) => (
               <div key={detail.id} className="mb-6 border-b pb-4">
                 <Typography variant="h6" className="font-bold mb-2">
@@ -153,6 +140,14 @@ const DetailPembelian = () => {
                     <Typography className="text-gray-500">Total Harga</Typography>
                     <Typography className="font-bold">Rp{Number(detail.sub_total).toLocaleString('id-ID')}</Typography>
                   </div>
+                  <div>
+                    <Typography className="text-gray-500">Bukti Pembayaran</Typography>
+                    <img
+                      src={paymentData.payment_image || "https://via.placeholder.com/150"}
+                      alt="Bukti Pembayaran"
+                      className="w-32 h-32 object-cover"
+                    />
+                  </div>
                 </div>
               </div>
             ))}
@@ -160,7 +155,6 @@ const DetailPembelian = () => {
         </Card>
 
         <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-          {/* Perbaiki onClick */}
           <Button color="green" onClick={() => handleAccepted(id)}>Accepted</Button>
           <Button color="red" onClick={() => handleRejected(id)}>Rejected</Button>
         </div>

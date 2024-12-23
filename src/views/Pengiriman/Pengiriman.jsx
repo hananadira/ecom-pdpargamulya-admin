@@ -70,19 +70,27 @@ const Pengiriman = () => {
   const handleButtonClick = async (id, status) => {
     try {
       let newStatus = '';
-
+  
+      // Tentukan status baru berdasarkan status saat ini
       if (status === '-') newStatus = 'disiapkan';
       else if (status === 'disiapkan') newStatus = 'dalam perjalanan';
       else if (status === 'dalam perjalanan') newStatus = 'sudah sampai';
-      
+  
       if (newStatus) {
         console.log('Updating status to:', newStatus);
-
+  
         // Update status sesuai dengan status yang diubah
-        const response = await updateStatusKirim({ id, updatedStatusKirim: newStatus }).unwrap();
-
-        console.log('Response from updateStatusKirim:', response);
-
+        let response;
+        if (newStatus === 'disiapkan') {
+          // Panggil updateStatusKirim jika status yang diubah adalah disiapkan atau dalam perjalanan
+          response = await updateStatusKirim({ id, updatedStatusKirim: newStatus }).unwrap();
+        } else if (newStatus === 'dalam perjalanan' || newStatus === 'sudah sampai') {
+          // Panggil updateStatusSampai jika status yang diubah adalah sudah sampai
+          response = await updateStatusSampai({ id, updateStatusSampai: newStatus }).unwrap();
+        }
+  
+        console.log('Response:', response);
+  
         // Validasi apakah update berhasil
         if (response?.success) {
           alert('Status berhasil diperbarui!');
@@ -97,6 +105,7 @@ const Pengiriman = () => {
       alert('Terjadi kesalahan saat memperbarui status.');
     }
   };
+  
 
   const indexOfLastPengiriman = currentPage * itemsPerPage;
   const indexOfFirstPengiriman = indexOfLastPengiriman - itemsPerPage;
@@ -124,15 +133,14 @@ const Pengiriman = () => {
 
           {/* Mengganti Tabs dengan tombol untuk navigasi */}
           <div className="flex gap-4 mt-6">
-            <Button onClick={() => handleNavigation("/pengiriman")} size="sm">
+            {/* <Button onClick={() => handleNavigation("/pengiriman")} size="sm">
               Data
-            </Button>
-            <Button onClick={() => handleNavigation("/pengiriman/selesai")} size="sm" className="bg-green-500">
+            </Button> */}
+            {/* <Button onClick={() => handleNavigation("/pengiriman/selesai")} size="sm" className="bg-green-500">
               Selesai
-            </Button>
+            </Button> */}
           </div>
         </CardHeader>
-
         <table className="w-full min-w-max table-auto text-left border-collapse border border-gray-200">
           <thead>
             <tr className="bg-blue-gray-100">
@@ -144,34 +152,36 @@ const Pengiriman = () => {
           </thead>
           <tbody>
             {currentPengiriman.length > 0 ? (
-              currentPengiriman.map((pengiriman, index) => (
-                <tr key={pengiriman.id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
-                  <td className="px-4 py-2 border-b">{index + 1}</td>
-                  <td className="px-4 py-2 border-b">{pengiriman.no_ref_order}</td>
-                  <td className="px-4 py-2 border-b">{pengiriman.shipping?.shipping_status}</td>
-                  <td className="px-4 py-2 border-b">
-                    <Menu>
-                      <MenuHandler>
-                        <Button variant="text" color="blue-gray" className="flex items-center">
-                          <FontAwesomeIcon icon={faEllipsisVertical} className="w-5 h-5" />
-                        </Button>
-                      </MenuHandler>
-                      <MenuList>
-                        <MenuItem>
-                          <Button 
-                            color="blue" 
-                            onClick={() => handleButtonClick(pengiriman.id, pengiriman.shipping?.shipping_status)}
-                          >
-                            {getButtonText(pengiriman.shipping?.shipping_status)}
+              currentPengiriman
+                .filter((pengiriman) => pengiriman.shipping?.shipping_status !== 'sudah sampai') // Menyaring data dengan status 'sudah sampai'
+                .map((pengiriman, index) => (
+                  <tr key={pengiriman.id} className="even:bg-blue-gray-50/50 hover:bg-blue-gray-100 transition-colors">
+                    <td className="px-4 py-2 border-b">{index + 1}</td>
+                    <td className="px-4 py-2 border-b">{pengiriman.no_ref_order}</td>
+                    <td className="px-4 py-2 border-b">{pengiriman.shipping?.shipping_status}</td>
+                    <td className="px-4 py-2 border-b">
+                      <Menu>
+                        <MenuHandler>
+                          <Button variant="text" color="blue-gray" className="flex items-center">
+                            <FontAwesomeIcon icon={faEllipsisVertical} className="w-5 h-5" />
                           </Button>
-                        </MenuItem>
-                        <MenuItem onClick={() => navigate(`/pengiriman/detail/${pengiriman.id}`)}>Detail</MenuItem>
-                        <MenuItem onClick={() => handleDelete(pengiriman.id)}>Delete</MenuItem>
-                      </MenuList>
-                    </Menu>
-                  </td>
-                </tr>
-              ))
+                        </MenuHandler>
+                        <MenuList>
+                          <MenuItem>
+                            <Button 
+                              color="blue" 
+                              onClick={() => handleButtonClick(pengiriman.id, pengiriman.shipping?.shipping_status)}
+                            >
+                              {getButtonText(pengiriman.shipping?.shipping_status)}
+                            </Button>
+                          </MenuItem>
+                          <MenuItem onClick={() => navigate(`/pengiriman/detail/${pengiriman.id}`)}>Detail</MenuItem>
+                          <MenuItem onClick={() => handleDelete(pengiriman.id)}>Delete</MenuItem>
+                        </MenuList>
+                      </Menu>
+                    </td>
+                  </tr>
+                ))
             ) : (
               <tr>
                 <td colSpan="5" className="text-center p-4">Tidak ada data</td>
@@ -179,6 +189,7 @@ const Pengiriman = () => {
             )}
           </tbody>
         </table>
+
         <div className="flex justify-between items-center mt-4">
           <Button 
             onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} 
