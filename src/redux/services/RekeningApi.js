@@ -30,13 +30,25 @@ const RekeningApi = apiCore.injectEndpoints({
 
     
     updateRekening: builder.mutation({
-      query: ({ id, ...updatedRekening }) => ({
-        url: `/api/rekening/${id}`,
-        method: 'PUT',
-        body: updatedRekening,
-      }),
+      query: ({ id, ...updateRekening }) => {
+        const rekeningPayload = new FormData();
+        rekeningPayload.append('_method', 'PUT'); // Override method with PUT
+        for (const key in updateRekening) {
+          rekeningPayload.append(key, updateRekening[key]);
+        }
+        // If there's an image, append it to FormData
+        if (updateRekening.payment_master_image) {
+          rekeningPayload.append('payment_master_image', updateRekening.payment_master_image);
+        }
+        return {
+          url: `/api/rekening/${id}`,
+          method: 'POST', // Sending as POST, but we override to PUT with _method
+          body: rekeningPayload, // Send as FormData
+        };
+      },
       invalidatesTags: ['Rekening'],
     }),
+
     deleteRekening: builder.mutation({
       query: (id) => ({
         url: `/api/rekening/${id}`,

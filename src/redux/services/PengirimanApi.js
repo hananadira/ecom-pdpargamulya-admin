@@ -59,7 +59,7 @@ const PengirimanApi = apiCore.injectEndpoints({
     }),
 
     // pengiriman (MASTER)
-    getMasterPengiriman: builder.query({
+    getMasterPengirimans: builder.query({
       query: () => 'api/shippingCost',
       transformResponse: (response) => {
         console.log("raw response:", response);
@@ -78,6 +78,32 @@ const PengirimanApi = apiCore.injectEndpoints({
       }),
       invalidatesTags: ['Pengiriman'],
     }),
+    getMasterPengiriman: builder.query({
+      query: (id) => `/api/shippingCost/${id}`,
+      transformResponse: (response) => {
+        console.log("raw response:", response);
+        if (response && response.data) {
+          return response.data; // Sesuaikan jika perlu
+        }
+        console.error("Invalid response structure:", response || "response is null or undefined");
+        return null; // Mengembalikan null jika respons tidak valid
+      },
+    }),
+    updateMasterPengiriman: builder.mutation({
+      query: ({ id, ...updatedPengiriman }) => ({
+        url: `/api/shippingCost/${id}`,
+        method: 'PUT',
+        body: updatedPengiriman,
+      }),
+      invalidatesTags: ['Pengiriman'],
+    }),
+    deleteMasterPengiriman: builder.mutation({
+      query: (id) => ({
+        url: `/api/shippingCost/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Pengiriman'],
+    }),
   }),
 });
 
@@ -85,11 +111,14 @@ export const {
   useGetPengirimansQuery,
   useGetPengirimanQuery,
   useGetMasterPengirimanQuery,
+  useGetMasterPengirimansQuery,
   useGetPengirimanSelesaiQuery,
   useCreateMasterPengirimanMutation,
   useUpdateStatusKirimMutation,
   useUpdateStatusSampaiMutation,
   useDeletePengirimanMutation,
+  useUpdateMasterPengirimanMutation,
+  useDeleteMasterPengirimanMutation,
 } = PengirimanApi;
 
 export default PengirimanApi;

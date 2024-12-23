@@ -1,13 +1,13 @@
 import React, { useState } from "react"; // Add useState here
 import { useNavigate } from "react-router-dom";
-import { useGetMasterPengirimanQuery } from '../../../redux/services/PengirimanApi';
+import { useGetMasterPengirimansQuery, useDeleteMasterPengirimanMutation } from '../../../redux/services/PengirimanApi';
 import { Card, Typography, Button, Menu, MenuHandler, MenuList, MenuItem } from "@material-tailwind/react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 
-const User = () => {
-  const { data, error, isLoading } = useGetMasterPengirimanQuery();
-  // const [deleteUser] = useDeleteUserMutation();
+const Pengiriman = () => {
+  const { data, error, isLoading } = useGetMasterPengirimansQuery();
+  const [deletePengiriman] = useDeleteMasterPengirimanMutation();
   const navigate = useNavigate();
 
   // Pagination state
@@ -19,9 +19,9 @@ const User = () => {
 
   // Handle Delete
   const handleDelete = async (id) => {
-    if (window.confirm("Apakah yakin Anda ingin menghapus data?")) {
+    if (window.confirm("Apakah Anda yakin ingin menghapus data?")) {
       try {
-        await deleteUser(id);
+        await deletePengiriman(id);
         console.log('Data berhasil dihapus');
       } catch (err) {
         console.error('Error saat menghapus:', err);
@@ -115,4 +115,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Pengiriman;

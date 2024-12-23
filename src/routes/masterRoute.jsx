@@ -71,7 +71,7 @@ function MasterRoutes() {
             <Route path="pengiriman" element={<MasterPengiriman />} />  {/* Rute ke Master User */}
             <Route path="pengiriman/create" element={<MasterPengirimanCreate />} />
             <Route path="pengiriman/edit/:id" element={<MasterPengirimanEdit />} />
-            <Route path="prngiriman/detail/:id" element={<MasterPengirimanDetail />} />
+            <Route path="pengiriman/detail/:id" element={<MasterPengirimanDetail />} />
 
             <Route path="page" element={<MasterPage />} />  {/* Rute ke Master User */}
             <Route path="page/create" element={<MasterPageCreate />} />
