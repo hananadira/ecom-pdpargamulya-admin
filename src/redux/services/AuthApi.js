@@ -1,80 +1,42 @@
-import { apiCore, baseUrlApi } from "./ApiCore";
-import { setAuthToken, setAuthUser, clearAuth, setVerified } from "../slice/AuthSlice";
+import { apiCore } from "./ApiCore";
+import { setAuthToken, setAuthUser, clearAuth } from "../slice/AuthSlice";
 import { toast } from "react-toastify";
 
 export const AuthApi = apiCore.injectEndpoints({
   reducerPath: "apiAuth",
   endpoints: (builder) => ({
-    emailVerify: builder.mutation({
-      query: (verifyData) => ({
-        url: `/api/verify`,
-        method: "POST",
-        body: verifyData,
-      }),
-      async onQueryStarted(credentials, { dispatch, queryFulfilled }) {
-        try { 
-          const { data } = await queryFulfilled;
-          console.log("Verification success:", data);
-
-          dispatch(setVerified({ IsVerified: true }));
-          
-          toast.success("Verification successful!");
-        } catch (error) {
-          console.error("Verification error:", error);
-          dispatch(clearAuth());       
-          // toast.error("Verification failed."); 
-        }
-      },
-    }),
-    
-
     authLogin: builder.mutation({
       query: (loginData) => ({
         url: `/api/login`,
         method: "POST",
         body: loginData,
       }),
-      async onQueryStarted(credentials, { dispatch, queryFulfilled }) {
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          console.log("data", data)
+          const { token, users, message } = data;
 
-          // Fetch user data after successful login
-          const res = await fetch(`${baseUrlApi}/api/detail`, {
-            headers: {
-              Authorization: `Bearer ${data.token}`, // Ensure correct token usage
-              "ngrok-skip-browser-warning": "true",
-              'Content-Type': 'application/json',
-            },
-          });
+          // Simpan token ke Redux dan localStorage
+          dispatch(setAuthToken({
+            token,
+            isLoggedIn: true,
+          }));
 
-          if (!res.ok) {
-            throw new Error("Failed to fetch user data");
-          }
+          // Simpan data user ke Redux
+          dispatch(setAuthUser(users));
 
-          const user = await res.json();
-          console.log("user", user)
+          // Simpan token di localStorage
+          localStorage.setItem('authToken', token);
 
-          dispatch(setAuthUser(user));
-          dispatch(
-            setAuthToken({
-              token: data.token,
-              isLoggedIn: true,
-            })
-          );
-          toast.success(data.message);
-
+          toast.success(message);
         } catch (error) {
-          const errorMessage= error.error.data.message
           dispatch(clearAuth());
-          toast.error(errorMessage);
+          toast.error("Login failed, please try again.");
         }
       },
     }),
   }),
-  overrideExisting: false,
 });
 
-export const { useEmailVerifyMutation, useAuthLoginMutation } = AuthApi;
-
+export const { useAuthLoginMutation } = AuthApi;
 export default AuthApi;

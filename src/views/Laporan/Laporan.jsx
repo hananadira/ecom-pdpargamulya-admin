@@ -1,3 +1,4 @@
+// ReportForm.jsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Select, Option, Input, Button, Typography } from "@material-tailwind/react";
@@ -30,8 +31,8 @@ const ReportForm = () => {
       return;
     }
   
-    // Navigasi ke halaman laporan dengan state yang mengandung tanggal
-    navigate(`/reports/${reportType}?start_date=${start_date}&end_date=${end_date}`);
+    // Navigasi ke halaman laporan dengan query parameter yang benar
+    navigate(`/laporan/reports/${reportType}?start_date=${start_date}&end_date=${end_date}`);
   };
   
   return (

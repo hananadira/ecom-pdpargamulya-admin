@@ -18,6 +18,7 @@ export default defineConfig({
         target: 'https://a9b1-45-64-100-26.ngrok-free.app',
         changeOrigin: true,
         secure: false,
+        // rewrite: (path) => path.replace(/^\/api/, ''), // Hapus prefix "/api" jika perlu
       },
     },
   },

@@ -196,7 +196,7 @@ const Home = () => {
       </div>
 
       {/* Baris ketiga dengan satu kartu yang lebar menyesuaikan panjang dua kartu di atasnya */}
-      <div className="flex">
+      {/* <div className="flex">
         <Card className="w-full">
           <CardBody>
             <Typography variant="h5" color="blue-gray" className="mb-2">
@@ -205,7 +205,7 @@ const Home = () => {
             <Typography>isi laporan di sini</Typography>
           </CardBody>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 };
