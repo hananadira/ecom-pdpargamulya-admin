@@ -3,15 +3,26 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 export const fetchSearchResults = createAsyncThunk(
   'search/fetchSearchResults',
   async (query) => {
-    const response = await fetch(`/api/search?query=${query}`);
-    return response.json();
+    const response = await fetch('/api/search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query }), // Kirim data pencarian sebagai body
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch search results');
+    }
+
+    return response.json(); // Pastikan backend mengembalikan data dalam format JSON
   }
 );
 
 const searchSlice = createSlice({
   name: 'search',
   initialState: {
-    results: {},
+    results: {}, // State awal
     status: 'idle',
     error: null,
   },
